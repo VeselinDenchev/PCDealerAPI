@@ -1,11 +1,12 @@
 ﻿namespace Data.Models.Abstractions.Interfaces
 {
     using Data.Models.Abstractions.Interfaces.Base;
+    using Data.Models.Entities;
 
     public interface IReview : IRating
     {
-        public IUser User { get; set; }
+        public User User { get; set; }
 
-        public IProduct Product { get; set; }
+        public Product Product { get; set; }
     }
 }

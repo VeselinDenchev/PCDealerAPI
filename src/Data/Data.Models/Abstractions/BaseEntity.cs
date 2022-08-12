@@ -1,6 +1,6 @@
 ﻿namespace Data.Models.Abstractions
 {
-    using Data.Models.Interfaces;
+    using Data.Models.Abstractions.Interfaces.Base;
 
     public abstract class BaseEntity : IEntity<string>
     {
@@ -14,11 +14,11 @@
 
         public string Id { get; init; }
 
-        public DateTime CreatedAtUtc { get; init; }
+        public DateTime CreatedAtUtc { get; set; }
 
         public DateTime ModifiedAtUtc { get; set; }
 
-        public DateTime? DeletedAtUtc { get; init; }
+        public DateTime? DeletedAtUtc { get; set; }
 
         public bool IsDeleted { get; set; }
     }

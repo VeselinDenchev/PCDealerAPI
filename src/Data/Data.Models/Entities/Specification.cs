@@ -5,7 +5,8 @@
 
     public class Specification : BaseEntity, ISpecification
     {
-        public string Type { get; set; }
+        public SpecificationType Type { get; set; }
+
         public string Value { get; set; }
     }
 }

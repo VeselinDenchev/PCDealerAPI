@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Data.Models.Abstractions.Interfaces
+﻿namespace Data.Models.Abstractions.Interfaces
 {
-    internal interface ICartItem
+    using Data.Models.Entities;
+
+
+    public interface ICartItem : IQuantity
     {
+        public Product Product { get; set; }
     }
 }

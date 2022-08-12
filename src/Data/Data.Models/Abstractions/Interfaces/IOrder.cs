@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Data.Models.Abstractions.Interfaces
+﻿namespace Data.Models.Abstractions.Interfaces
 {
-    internal interface IOrder
+    using Data.Models.Entities;
+
+    public interface IOrder
     {
+        public ICollection<CartItem> CartItems { get; set; }
     }
 }

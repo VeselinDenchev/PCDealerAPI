@@ -2,6 +2,6 @@
 {
     public interface ICreatedInfo
     {
-        public DateTime CreatedAtUtc { get; init; }
+        public DateTime CreatedAtUtc { get; set; }
     }
 }

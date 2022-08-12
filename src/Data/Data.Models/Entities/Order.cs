@@ -7,6 +7,6 @@
 
     public class Order : BaseEntity, IOrder
     {
-        public ICollection<ICartItem> CartItems { get; set; }
+        public ICollection<CartItem> CartItems { get; set; }
     }
 }
