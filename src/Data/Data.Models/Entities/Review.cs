@@ -5,9 +5,9 @@
 
     public class Review : BaseEntity, IReview
     {
-        public IUser User { get; set; }
+        public User User { get; set; }
 
-        public IProduct Product { get; set; }
+        public Product Product { get; set; }
 
         public float Rating { get; set; }
     }

@@ -7,8 +7,6 @@
 
     public interface IProduct : IName, IRating, IQuantity
     {
-        public static int count = 0;
-
         public Brand Brand { get; set; }
 
         public Model Model { get; set; }

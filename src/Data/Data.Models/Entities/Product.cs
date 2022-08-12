@@ -10,7 +10,7 @@
     {
         public float Rating { get; set; }
 
-        public IBrand Brand { get; set; }
+        public Brand Brand { get; set; }
 
         public Model Model { get; set; }
 
