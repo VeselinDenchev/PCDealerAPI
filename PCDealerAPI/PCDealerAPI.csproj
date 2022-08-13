@@ -7,12 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\src\Data\Data.DbContext\Data.DbContext.csproj" />
     <ProjectReference Include="..\src\Data\Data.Models\Data.Models.csproj" />
     <ProjectReference Include="..\src\Data\Data.Services\Data.Services.csproj" />
   </ItemGroup>

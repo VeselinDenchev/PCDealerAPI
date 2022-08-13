@@ -7,11 +7,12 @@
     using System.Text;
 
     using Data.Services.DtoModels.Jwt;
+    using Data.Services.Interfaces;
 
     using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Tokens;
 
-    public class JwtService
+    public class JwtService : IJwtService
     {
         public JwtService(IOptions<TokenModel> options)
         {
