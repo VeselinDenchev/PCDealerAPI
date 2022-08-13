@@ -1,4 +1,4 @@
-﻿namespace Data.Models.DtoModels
+﻿namespace Data.Services.DtoModels.Jwt
 {
     public class RequestTokenModel
     {

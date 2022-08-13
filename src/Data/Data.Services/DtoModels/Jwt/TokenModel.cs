@@ -1,4 +1,4 @@
-﻿namespace Data.Services.DtoModels
+﻿namespace Data.Services.DtoModels.Jwt
 {
     using Newtonsoft.Json;
 

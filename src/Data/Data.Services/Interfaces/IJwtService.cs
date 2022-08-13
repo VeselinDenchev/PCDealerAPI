@@ -1,8 +1,8 @@
 ﻿namespace Data.Services.Interfaces
 {
-    using Data.Models.DtoModels;
+    using Data.Services.DtoModels.Jwt;
 
-    public interface IJwtTokenService
+    public interface IJwtService
     {
         public string GenerateUserToken(RequestTokenModel request);
     }

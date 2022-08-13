@@ -8,6 +8,8 @@
 
     public class Product : BaseEntity, IProduct
     {
+        public string Name { get; set; }
+
         public float Rating { get; set; }
 
         public Brand Brand { get; set; }
@@ -16,7 +18,7 @@
 
         public decimal Price { get; set; }
 
-        public List<UploadedFile> Images { get; set; }
+        public List<ImageFile> Images { get; set; }
 
         public string Description { get; set; }
 
@@ -26,8 +28,5 @@
         public ICollection<Specification> Specifications { get; set; }
 
         public Category Category { get; set; }
-
-        public string Name { get; set; }
     }
-
 }

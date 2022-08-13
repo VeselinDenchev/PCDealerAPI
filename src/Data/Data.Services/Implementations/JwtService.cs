@@ -6,15 +6,14 @@
     using System.Security.Claims;
     using System.Text;
 
-    using Data.Models.DtoModels;
-    using Data.Services.DtoModels;
+    using Data.Services.DtoModels.Jwt;
 
     using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Tokens;
 
-    public class JwtTokenService
+    public class JwtService
     {
-        public JwtTokenService(IOptions<TokenModel> options)
+        public JwtService(IOptions<TokenModel> options)
         {
             this.TokenModel = options.Value;
         }

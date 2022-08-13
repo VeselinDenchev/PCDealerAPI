@@ -13,7 +13,7 @@
 
         public decimal Price { get; set; }
 
-        List<UploadedFile> Images { get; set; }
+        List<ImageFile> Images { get; set; }
 
         [MaxLength(300)]
         public string Description { get; set; }
