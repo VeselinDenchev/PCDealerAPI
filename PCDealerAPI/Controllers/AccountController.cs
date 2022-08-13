@@ -2,7 +2,7 @@
 {
     using Data.Models.Entities;
     using Data.Services.DtoModels.Jwt;
-    using Data.Services.Interfaces;
+    using Data.Services.JWT.Interfaces;
     using Data.Services.ViewModels;
 
     using Microsoft.AspNetCore.Identity;
@@ -34,8 +34,12 @@
             {
                 User newUser = new User()
                 {
+                    FirstName = registerModel.FirstName,
+                    LastName = registerModel.LastName,
                     Email = registerModel.Email,
-                    UserName = registerModel.Email
+                    UserName = registerModel.Email,
+                    PhoneNumber = registerModel.PhoneNumber,
+                    Address = registerModel.Address,
                 };
 
                 var token = JwtService.GenerateUserToken(new RequestTokenModel()
@@ -48,7 +52,7 @@
 
                 if (result.Succeeded && token.Length > 0)
                 {
-                    return Ok("Successfully registered!");
+                    return Ok(token);
                 }
                 return BadRequest("Register attempt failed! Please, check email and passowrd!");
             }
@@ -64,17 +68,18 @@
 
             if (checkUser is not null)
             {
-                var checkPassword = await SignInManager.CheckPasswordSignInAsync(checkUser, loginModel.Password, lockoutOnFailure: false);
+                var checkPassword = 
+                    await SignInManager.CheckPasswordSignInAsync(checkUser, loginModel.Password, lockoutOnFailure: false);
 
                 var token = JwtService.GenerateUserToken(new RequestTokenModel()
                 {
                     Email = checkUser.Email,
-                    UserName = checkUser.UserName,
+                    UserName = checkUser.Email,
                 });
 
                 if (checkPassword.Succeeded && token.Length > 0)
                 {
-                    return Ok("Successfully logged in");
+                    return Ok(token);
                 }
 
                 return BadRequest("Wrong password or token error!");

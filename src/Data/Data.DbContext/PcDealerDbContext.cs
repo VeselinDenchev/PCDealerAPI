@@ -47,17 +47,17 @@
             {
                 if (entity.State == EntityState.Added)
                 {
-                    entity.Entity.CreatedAtUtc = DateTime.Now;
-                    entity.Entity.ModifiedAtUtc = DateTime.Now;
+                    entity.Entity.CreatedAtUtc = DateTime.UtcNow;
+                    entity.Entity.ModifiedAtUtc = DateTime.UtcNow;
                 }
                 else if (entity.State == EntityState.Modified)
                 {
-                    entity.Entity.ModifiedAtUtc = DateTime.Now;
+                    entity.Entity.ModifiedAtUtc = DateTime.UtcNow;
                 }
                 else if (entity.State == EntityState.Detached)
                 {
                     entity.State = EntityState.Deleted;
-                    entity.Entity.DeletedAtUtc = DateTime.Now;
+                    entity.Entity.DeletedAtUtc = DateTime.UtcNow;
                     entity.Entity.IsDeleted = true;
                 }
             }

@@ -12,7 +12,7 @@
             IsDeleted = false;
         }
 
-        public string Id { get; init; }
+        public string Id { get; set; }
 
         public DateTime CreatedAtUtc { get; set; }
 

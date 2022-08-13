@@ -3,14 +3,16 @@ using System.Text;
 using Data.DbContext;
 using Data.Models.Entities;
 using Data.Services.DtoModels.Jwt;
-using Data.Services.Implementations;
-using Data.Services.Interfaces;
+using Data.Services.JWT;
 using Data.Services.MapProfiles;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Data.Services.JWT.Interfaces;
+using Data.Services.EntityServices.Interfaces;
+using Data.Services.EntityServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +33,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddScoped<PcDealerDbContext>();
 builder.Services.AddAutoMapper(typeof(MapProfile));
 // TODO: Services
+builder.Services.AddScoped<IBrandService, BrandService>();
 
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.Configure<TokenModel>(builder.Configuration.GetSection("JWT"));

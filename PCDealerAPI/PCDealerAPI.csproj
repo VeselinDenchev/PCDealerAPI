@@ -14,7 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Data\Data.DbContext\Data.DbContext.csproj" />
     <ProjectReference Include="..\src\Data\Data.Models\Data.Models.csproj" />
     <ProjectReference Include="..\src\Data\Data.Services\Data.Services.csproj" />
   </ItemGroup>

@@ -8,6 +8,6 @@
         public string Name { get; set; }
 
         [JsonProperty(PropertyName = "models")]
-        public ICollection<ModelDto> Models { get; set; }
+        public ICollection<ModelDto>? Models { get; set; }
     }
 }

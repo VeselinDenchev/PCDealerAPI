@@ -1,4 +1,4 @@
-﻿namespace Data.Services.Interfaces
+﻿namespace Data.Services.JWT.Interfaces
 {
     using Data.Services.DtoModels.Jwt;
 

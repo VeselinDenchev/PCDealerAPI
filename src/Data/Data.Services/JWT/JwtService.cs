@@ -1,4 +1,4 @@
-﻿namespace Data.Services.Implementations
+﻿namespace Data.Services.JWT
 {
     using System;
     using System.Collections.Generic;
@@ -7,7 +7,7 @@
     using System.Text;
 
     using Data.Services.DtoModels.Jwt;
-    using Data.Services.Interfaces;
+    using Data.Services.JWT.Interfaces;
 
     using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Tokens;
@@ -29,7 +29,6 @@
             {
                 new Claim(ClaimTypes.NameIdentifier, request.UserName),
             };
-
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(TokenModel.TokenSecret));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

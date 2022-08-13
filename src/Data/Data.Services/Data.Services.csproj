@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Data.DbContext\Data.DbContext.csproj" />
     <ProjectReference Include="..\Data.Models\Data.Models.csproj" />
   </ItemGroup>
 
