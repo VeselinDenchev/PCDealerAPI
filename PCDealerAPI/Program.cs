@@ -34,6 +34,7 @@ builder.Services.AddScoped<PcDealerDbContext>();
 builder.Services.AddAutoMapper(typeof(MapProfile));
 // TODO: Services
 builder.Services.AddScoped<IBrandService, BrandService>();
+builder.Services.AddScoped<IModelService, ModelService>();
 
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.Configure<TokenModel>(builder.Configuration.GetSection("JWT"));

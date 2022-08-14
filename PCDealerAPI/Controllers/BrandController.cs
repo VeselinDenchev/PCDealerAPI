@@ -40,6 +40,7 @@
         }
 
         [HttpPost]
+        [EnableCors("MyCorsPolicy")]
         [Route("add")]
         public IActionResult AddBrand([FromForm] BrandDto brand)
         {

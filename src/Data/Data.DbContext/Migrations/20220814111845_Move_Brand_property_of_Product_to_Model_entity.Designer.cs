@@ -4,6 +4,7 @@ using Data.DbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.DbContext.Migrations
 {
     [DbContext(typeof(PcDealerDbContext))]
-    partial class PcDealerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220814111845_Move_Brand_property_of_Product_to_Model_entity")]
+    partial class Move_Brand_property_of_Product_to_Model_entity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

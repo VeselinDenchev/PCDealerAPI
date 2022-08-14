@@ -5,6 +5,8 @@
 
     public class Model : BaseEntity, IName
     {
+        public Brand Brand { get; set; }
+
         public string Name { get; set; }
     }
 }

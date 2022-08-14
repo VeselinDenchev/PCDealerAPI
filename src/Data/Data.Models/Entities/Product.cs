@@ -12,8 +12,6 @@
 
         public float Rating { get; set; }
 
-        public Brand Brand { get; set; }
-
         public Model Model { get; set; }
 
         public decimal Price { get; set; }

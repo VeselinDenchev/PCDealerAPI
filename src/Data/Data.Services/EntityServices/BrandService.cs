@@ -10,6 +10,8 @@
     using Data.Services.DtoModels;
     using Data.Services.EntityServices.Interfaces;
 
+    using Microsoft.EntityFrameworkCore;
+
     public class BrandService : IBrandService
     {
         public BrandService(PcDealerDbContext dbContext, IMapper mapper)
@@ -60,12 +62,21 @@
 
         public void DeleteBrand(string brandId)
         {
-            Brand brand = this.DbContext.Brands.Where(r => r.Id == brandId && r.IsDeleted == false).FirstOrDefault();
+            Brand brand = this.DbContext.Brands.Where(r => r.Id == brandId && r.IsDeleted == false)
+                                                .Include(b => b.Models)
+                                                .FirstOrDefault();
 
             brand.IsDeleted = true;
             brand.DeletedAtUtc = DateTime.UtcNow;
 
+            foreach (Model model in brand.Models)
+            {
+                model.IsDeleted = true;
+                model.DeletedAtUtc = DateTime.UtcNow;
+            }
+
             this.DbContext.Brands.Update(brand);
+            this.DbContext.Models.UpdateRange(brand.Models);
             this.DbContext.SaveChanges();
         }
     }
