@@ -55,7 +55,7 @@
         public IActionResult UpdateBrand([FromRoute] string brandId, [FromForm] BrandDto brand)
         {
             brand.Id = brandId;
-            this.BrandService.UpdateBrand(brandId, brand);
+            this.BrandService.UpdateBrand(brandId,brand);
 
             return Ok(brand);
         }

@@ -21,22 +21,27 @@
 
         public IMapper Mapper { get; set; }
 
-        public ModelDto[] GetAllBrandModels(string brandId)
+        public ICollection<ModelDto> GetAllBrandModels(string brandId)
         {
-            Model[] brandModels = this.DbContext.Brands.Include(b => b.Models)
-                                                        .FirstOrDefault(b => b.Id == brandId && b.IsDeleted == false)
-                                                        .Models.Where(m => m.IsDeleted == false)
-                                                                .ToArray();
-            ModelDto[] brandModelDtos = this.Mapper.Map<Model[], ModelDto[]>(brandModels);
+            Brand brand = this.DbContext.Brands.Include(b => b.Models)
+                                                        .AsNoTracking()
+                                                        .FirstOrDefault(b => b.Id == brandId && b.IsDeleted == false);
+
+            ICollection<ModelDto> brandModelDtos = new List<ModelDto>();
+
+            if (brand is not null)
+            {
+                var brandModels = brand.Models.Where(m => m.IsDeleted == false).ToArray();
+                brandModelDtos = this.Mapper.Map<ICollection<Model>, ICollection<ModelDto>>(brandModels);
+            }
+            else throw new ArgumentException ("Invalid brand!");
 
             return brandModelDtos;
         }
 
-        public ModelDto GetModel(string brandId, string modelId)
+        public ModelDto GetModel(string modelId)
         {
-            Model brandModel = this.DbContext.Brands.Include(b => b.Models)
-                                                    .FirstOrDefault(b => b.Id == brandId && b.IsDeleted == false)
-                                                    .Models.FirstOrDefault(m => m.Id == modelId && m.IsDeleted == false);
+            Model brandModel = this.DbContext.Models.FirstOrDefault(m => m.Id == modelId && m.IsDeleted == false);
             ModelDto brandModelDto = this.Mapper.Map<Model, ModelDto>(brandModel);
 
             return brandModelDto;
@@ -48,14 +53,12 @@
             this.DbContext.Models.Add(model);
             this.DbContext.Brands.Include(b => b.Models).FirstOrDefault(b => b.Id == brandId && b.IsDeleted == false)
                                                         .Models.Add(model);
-
             this.DbContext.SaveChanges();
         }
 
-        public void UpdateModel(string modelId, ModelDto modelDto)
+        public void UpdateModel(ModelDto modelDto)
         {
             Model model = this.Mapper.Map<ModelDto, Model>(modelDto);
-            //model.Id = modelId;
             this.DbContext.Models.Update(model);
 
             this.DbContext.SaveChanges();

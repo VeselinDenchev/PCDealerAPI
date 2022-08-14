@@ -14,20 +14,24 @@
 
     public class BrandService : IBrandService
     {
-        public BrandService(PcDealerDbContext dbContext, IMapper mapper)
+        public BrandService(PcDealerDbContext dbContext, IMapper mapper, IModelService modelService)
         {
             this.DbContext = dbContext;
             this.Mapper = mapper;
+            this.ModelService = modelService;
         }
 
-        public PcDealerDbContext DbContext { get; set; }
+        public PcDealerDbContext DbContext { get; init; }
 
-        public IMapper Mapper { get; set; }
+        public IMapper Mapper { get; init; }
+
+        public IModelService ModelService { get; init; }
 
         public BrandDto[] GetAllBrands()
         {
             var brands = this.DbContext.Brands
                                             .Where(b => b.IsDeleted == false)
+                                            .Include(b => b.Models)
                                             .ToArray();
             var brandDtos = this.Mapper.Map<Brand[], BrandDto[]>(brands);
 
@@ -36,7 +40,9 @@
 
         public BrandDto GetBrand(string brandId)
         {
-            Brand brand = this.DbContext.Brands.Where(r => r.Id == brandId && r.IsDeleted == false).FirstOrDefault();
+            Brand brand = this.DbContext.Brands.Where(r => r.Id == brandId && r.IsDeleted == false)
+                                                .Include(b => b.Models)
+                                                .FirstOrDefault();
             BrandDto brandDto = this.Mapper.Map<Brand, BrandDto>(brand);
 
             return brandDto;
@@ -53,8 +59,13 @@
 
         public void UpdateBrand(string brandId, BrandDto updatedBrandDto)
         {
+            ICollection<ModelDto> brandModelDtos = this.ModelService.GetAllBrandModels(brandId);
+            updatedBrandDto.Models = brandModelDtos;
+
+            ICollection<Model> brandModels = this.Mapper.Map<ICollection<ModelDto>, ICollection<Model>>(brandModelDtos);
+
             Brand brand = this.Mapper.Map<BrandDto, Brand>(updatedBrandDto);
-            brand.Id = brandId;
+            brand.Models = brandModels;
 
             this.DbContext.Brands.Update(brand);
             this.DbContext.SaveChanges();

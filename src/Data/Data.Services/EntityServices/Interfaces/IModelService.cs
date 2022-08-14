@@ -4,13 +4,13 @@
 
     public interface IModelService
     {
-        public ModelDto[] GetAllBrandModels(string brandId);
+        public ICollection<ModelDto> GetAllBrandModels(string brandId);
 
-        public ModelDto GetModel(string brandId, string modelId);
+        public ModelDto GetModel(string modelId);
 
         public void AddModel(string brandId, ModelDto modelDto);
 
-        public void UpdateModel(string modelId, ModelDto modelDto);
+        public void UpdateModel(ModelDto modelDto);
 
         public void DeleteModel(string modelId);
     }

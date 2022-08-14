@@ -24,6 +24,7 @@
             CreateMap<Product, ProductDto>().ReverseMap();
             CreateMap<Review, ReviewDto>().ReverseMap();
             CreateMap<Specification, SpecificationDto>().ReverseMap();
+            CreateMap<SpecificationType, SpecificationTypeDto>().ReverseMap();
         }
     }
 }

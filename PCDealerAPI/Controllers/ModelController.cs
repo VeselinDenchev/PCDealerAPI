@@ -22,24 +22,33 @@
         [Route("{brandId}/all")]
         public IActionResult GetAllBrandModels([FromRoute] string brandId)
         {
-            ModelDto[] brandModels = this.ModelService.GetAllBrandModels(brandId);
+            try
+            {
+                ICollection<ModelDto> brandModels = this.ModelService.GetAllBrandModels(brandId);
 
-            return Ok(brandModels);
+                return Ok(brandModels);
+
+            }
+            catch (ArgumentException ae)
+            {
+                return NotFound(ae.Message);
+            }
         }
 
         [HttpGet]
         [EnableCors("MyCorsPolicy")]
-        [Route("{brandId}/get/{modelId}")]
-        public IActionResult GetModel([FromRoute] string brandId, [FromRoute] string modelId)
+        [Route("get/{modelId}")]
+        public IActionResult GetModel([FromRoute] string modelId)
         {
-            ModelDto brandModel = this.ModelService.GetModel(brandId, modelId);
+            ModelDto brandModel = this.ModelService.GetModel(modelId);
+            if (brandModel is null) return NotFound("Can't find such model!");
 
             return Ok(brandModel);
         }
 
         [HttpPost]
         [EnableCors("MyCorsPolicy")]
-        [Route("{brandId}/add")]
+        [Route("brand/{brandId}/add")]
         public IActionResult AddModel([FromRoute] string brandId, [FromForm] ModelDto model)
         {
             try
@@ -49,7 +58,7 @@
                 return Ok(model);
 
             }
-            catch (ArgumentNullException)
+            catch (NullReferenceException)
             {
                 return NotFound("Such brand doesn't exist!");
             }
@@ -63,7 +72,7 @@
             try
             {
                 model.Id = modelId;
-                this.ModelService.UpdateModel(modelId, model);
+                this.ModelService.UpdateModel(model);
 
                 return Ok(model);
 
@@ -84,7 +93,6 @@
                 this.ModelService.DeleteModel(modelId);
 
                 return Ok("The model is successfully deleted");
-
             }
             catch (ArgumentNullException)
             {
