@@ -29,12 +29,10 @@
 
             ICollection<ModelDto> brandModelDtos = new List<ModelDto>();
 
-            if (brand is not null)
-            {
-                var brandModels = brand.Models.Where(m => m.IsDeleted == false).ToArray();
-                brandModelDtos = this.Mapper.Map<ICollection<Model>, ICollection<ModelDto>>(brandModels);
-            }
-            else throw new ArgumentException ("Invalid brand!");
+            if (brand is null) throw new ArgumentException("Invalid brand!");
+
+            var brandModels = brand.Models.Where(m => m.IsDeleted == false).ToArray();
+            brandModelDtos = this.Mapper.Map<ICollection<Model>, ICollection<ModelDto>>(brandModels);
 
             return brandModelDtos;
         }
@@ -58,6 +56,9 @@
 
         public void UpdateModel(ModelDto modelDto)
         {
+            bool exists = this.DbContext.Models.Any(st => st.Id == modelDto.Id);
+            if (!exists) throw new ArgumentException("Such model doesn't exist!");
+
             Model model = this.Mapper.Map<ModelDto, Model>(modelDto);
             this.DbContext.Models.Update(model);
 
@@ -66,6 +67,9 @@
 
         public void DeleteModel(string modelId)
         {
+            bool exists = this.DbContext.Models.Any(st => st.Id == modelId);
+            if (!exists) throw new ArgumentException("Such model doesn't exist!");
+
             Model modelToBeDeleted = this.DbContext.Models.Where(m => m.Id == modelId).FirstOrDefault();
             modelToBeDeleted.IsDeleted = true;
             modelToBeDeleted.DeletedAtUtc = DateTime.UtcNow;

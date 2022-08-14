@@ -57,9 +57,12 @@
             this.DbContext.SaveChanges();
         }
 
-        public void UpdateBrand(string brandId, BrandDto updatedBrandDto)
+        public void UpdateBrand(BrandDto updatedBrandDto)
         {
-            ICollection<ModelDto> brandModelDtos = this.ModelService.GetAllBrandModels(brandId);
+            bool exists = this.DbContext.Brands.Any(b => b.Id == updatedBrandDto.Id);
+            if (!exists) throw new ArgumentException("Such brand doesn't exist!");
+
+            ICollection<ModelDto> brandModelDtos = this.ModelService.GetAllBrandModels(updatedBrandDto.Id);
             updatedBrandDto.Models = brandModelDtos;
 
             ICollection<Model> brandModels = this.Mapper.Map<ICollection<ModelDto>, ICollection<Model>>(brandModelDtos);
@@ -73,9 +76,12 @@
 
         public void DeleteBrand(string brandId)
         {
+            bool exists = this.DbContext.Brands.Any(b => b.Id == brandId);
+            if (!exists) throw new ArgumentException("Such brand doesn't exist!");
+
             Brand brand = this.DbContext.Brands.Where(r => r.Id == brandId && r.IsDeleted == false)
                                                 .Include(b => b.Models)
-                                                .FirstOrDefault();
+                                                .First();
 
             brand.IsDeleted = true;
             brand.DeletedAtUtc = DateTime.UtcNow;

@@ -8,6 +8,10 @@
     {
         public ICollection<SpecificationTypeDto> GetAllSpecificationTypes();
 
+        public SpecificationTypeDto GetSpecificationTypeByTypeId(string specificationTypeId);
+
+        public SpecificationTypeDto GetSpecificationTypeById(string specificationId);
+
         public void AddSpecificationType(SpecificationTypeDto specificationTypeDto);
 
         public void UpdateSpecificationType(SpecificationTypeDto specificationTypeDto);

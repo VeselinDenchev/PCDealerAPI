@@ -41,7 +41,8 @@
         public IActionResult GetModel([FromRoute] string modelId)
         {
             ModelDto brandModel = this.ModelService.GetModel(modelId);
-            if (brandModel is null) return NotFound("Can't find such model!");
+
+            if (brandModel is null) return NotFound("Such model doesn't exist!");
 
             return Ok(brandModel);
         }
@@ -94,9 +95,9 @@
 
                 return Ok("The model is successfully deleted");
             }
-            catch (ArgumentNullException)
+            catch (ArgumentException ae)
             {
-                return NotFound("Such model doesn't exist!");
+                return NotFound(ae.Message);
             }
         }
     }

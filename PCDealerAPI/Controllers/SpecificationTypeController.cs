@@ -50,9 +50,9 @@
                 return Ok(specificationType);
 
             }
-            catch (ArgumentNullException)
+            catch (ArgumentException ae)
             {
-                return NotFound("Such specification type doesn't exist!");
+                return NotFound(ae.Message);
             }
         }
 
@@ -67,9 +67,9 @@
 
                 return Ok("The specification type is successfully deleted");
             }
-            catch (ArgumentNullException)
+            catch (ArgumentException ae)
             {
-                return NotFound("Such specification type doesn't exist!");
+                return NotFound(ae.Message);
             }
         }
     }

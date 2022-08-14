@@ -20,7 +20,6 @@
         public IBrandService BrandService { get; set; }
 
         [HttpGet]
-        [EnableCors("MyCorsPolicy")]
         [Route("get/all")]
         public IActionResult GetAllBrands()
         {
@@ -35,6 +34,8 @@
         public IActionResult GetBrand([FromRoute] string brandId)
         {
             BrandDto brand = this.BrandService.GetBrand(brandId);
+
+            if (brand is null) return NotFound("Such brand doesn't exist!");
 
             return Ok(brand);
         }
@@ -54,24 +55,37 @@
         [Route("update/{brandId}")]
         public IActionResult UpdateBrand([FromRoute] string brandId, [FromForm] BrandDto brand)
         {
-            brand.Id = brandId;
-            this.BrandService.UpdateBrand(brandId,brand);
+            try
+            {
+                brand.Id = brandId;
+                this.BrandService.UpdateBrand(brand);
 
-            return Ok(brand);
+                return Ok(brand);
+            }
+            catch (ArgumentException ae)
+            {
+                return NotFound(ae.Message);
+            }
+
+
         }
 
         [HttpDelete]
         [Route("delete/{brandId}")]
         public IActionResult DeleteBrand([FromRoute] string brandId)
         {
-            if (brandId is null)
+            try
             {
-                return NotFound("Region not found!");
+                this.BrandService.DeleteBrand(brandId);
+
+                return Ok("Brand successfully deleted!");
+
+            }
+            catch (ArgumentException ae)
+            {
+                return NotFound(ae.Message);
             }
 
-            this.BrandService.DeleteBrand(brandId);
-
-            return Ok(JsonConvert.SerializeObject("Brand successfully deleted!"));
         }
     }
 }

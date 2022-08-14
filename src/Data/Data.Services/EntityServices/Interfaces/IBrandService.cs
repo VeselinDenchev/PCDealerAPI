@@ -16,7 +16,7 @@
 
         public void AddBrand(BrandDto brandDto);
 
-        public void UpdateBrand(string brandId, BrandDto updatedBrandDto);
+        public void UpdateBrand(BrandDto updatedBrandDto);
 
         public void DeleteBrand(string brandId);
     }
