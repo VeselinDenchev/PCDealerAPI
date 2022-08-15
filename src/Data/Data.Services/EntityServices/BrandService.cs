@@ -51,7 +51,6 @@
         public void AddBrand(BrandDto brandDto)
         {
             Brand brand = this.Mapper.Map<BrandDto, Brand>(brandDto);
-            brandDto.Id = brand.Id;
 
             this.DbContext.Brands.Add(brand);
             this.DbContext.SaveChanges();
