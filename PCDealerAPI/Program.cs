@@ -37,6 +37,7 @@ builder.Services.AddScoped<IBrandService, BrandService>();
 builder.Services.AddScoped<IModelService, ModelService>();
 builder.Services.AddScoped<ISpecificationTypeService, SpecificationTypeService>();
 builder.Services.AddScoped<ISpecificationService, SpecificationService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.Configure<TokenModel>(builder.Configuration.GetSection("JWT"));
