@@ -10,7 +10,17 @@
     {
         public string Name { get; set; }
 
-        public float Rating { get; set; }
+        public string Processor { get; set; }
+
+        public string Ram { get; set; }
+
+        public string GPU { get; set; }
+
+        public string Storage { get; set; }
+
+        public string Display { get; set; }
+
+        public float? Rating { get; set; }
 
         public Model Model { get; set; }
 
@@ -22,9 +32,5 @@
 
         [Range(0, short.MaxValue, ErrorMessage = "Quantity must be non negative!")]
         public short Quantity { get; set; }
-
-        public ICollection<Specification> Specifications { get; set; }
-
-        public Category Category { get; set; }
     }
 }

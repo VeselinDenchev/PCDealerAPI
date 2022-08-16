@@ -8,9 +8,9 @@
 
         public ModelDto GetModel(string modelId);
 
-        public void AddModel(string brandId, ModelDto modelDto);
+        public void AddModel(ModelDto modelDto, string brandId, string categoryId);
 
-        public void UpdateModel(ModelDto modelDto);
+        public void UpdateModel(ModelDto modelDto, string categoryId);
 
         public void DeleteModel(string modelId);
     }

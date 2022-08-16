@@ -34,10 +34,10 @@
 
         [HttpPost]
         [EnableCors("MyCorsPolicy")]
-        [Route("add")]
-        public IActionResult AddReview([FromForm] ReviewDto review)
+        [Route("product/{productId}/add")]
+        public IActionResult AddReview([FromRoute] string productId, [FromForm] ReviewDto review)
         {
-            this.ReviewService.AddReview(review);
+            this.ReviewService.AddReview(review, productId);
 
             return Ok(review);
         }

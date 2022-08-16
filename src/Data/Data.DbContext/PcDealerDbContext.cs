@@ -27,9 +27,6 @@
         
         public DbSet<Review> Reviews { get; set; }
 
-        public DbSet<Specification> Specifications { get; set; }
-        
-        public DbSet<SpecificationType> SpecificationTypes { get; set; }
 
         private IConfigurationRoot configuration;
 

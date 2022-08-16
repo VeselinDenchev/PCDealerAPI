@@ -49,12 +49,12 @@
 
         [HttpPost]
         [EnableCors("MyCorsPolicy")]
-        [Route("brand/{brandId}/add")]
-        public IActionResult AddModel([FromRoute] string brandId, [FromForm] ModelDto model)
+        [Route("{brandId}/{categoryId?}/add")]
+        public IActionResult AddModel([FromRoute] string brandId, [FromRoute] string? categoryId, [FromForm] ModelDto model)
         {
             try
             {
-                this.ModelService.AddModel(brandId, model);
+                this.ModelService.AddModel(model, brandId, categoryId);
 
                 return Ok(model);
 
@@ -63,17 +63,21 @@
             {
                 return NotFound("Such brand doesn't exist!");
             }
+            catch (ArgumentException ae)
+            {
+                return NotFound(ae.Message);
+            }
         }
 
         [HttpPut]
         [EnableCors("MyCorsPolicy")]
-        [Route("update/{modelId}")]
-        public IActionResult UpdateModel(string modelId, [FromForm] ModelDto model)
+        [Route("update/{modelId}/{categoryId?}")]
+        public IActionResult UpdateModel([FromRoute] string modelId, [FromRoute] string? categoryId, [FromForm] ModelDto model)
         {
             try
             {
                 model.Id = modelId;
-                this.ModelService.UpdateModel(model);
+                this.ModelService.UpdateModel(model, categoryId);
 
                 return Ok(model);
 

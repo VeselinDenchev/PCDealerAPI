@@ -32,12 +32,14 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddScoped<PcDealerDbContext>();
 builder.Services.AddAutoMapper(typeof(MapProfile));
-// TODO: Services
+
 builder.Services.AddScoped<IBrandService, BrandService>();
 builder.Services.AddScoped<IModelService, ModelService>();
-builder.Services.AddScoped<ISpecificationTypeService, SpecificationTypeService>();
-builder.Services.AddScoped<ISpecificationService, SpecificationService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IImageService, ImageService>();
 
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.Configure<TokenModel>(builder.Configuration.GetSection("JWT"));

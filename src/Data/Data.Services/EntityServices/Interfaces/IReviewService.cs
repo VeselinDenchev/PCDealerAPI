@@ -6,7 +6,7 @@
     {
         public ReviewDto GetReview(string reviewId);
 
-        public void AddReview(string productId, ReviewDto reviewDto);
+        public void AddReview(ReviewDto reviewDto, string productId);
 
         public void UpdateReview(ReviewDto updatedReviewDto);
 

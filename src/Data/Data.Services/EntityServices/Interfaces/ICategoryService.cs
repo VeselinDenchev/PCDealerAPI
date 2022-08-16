@@ -4,6 +4,8 @@
 
     public interface ICategoryService
     {
+        public CategoryDto GetCategory(string categoryId);
+
         public void AddCategory(CategoryDto categoryDto);
 
         public void UpdateCategory(CategoryDto categoryDto);

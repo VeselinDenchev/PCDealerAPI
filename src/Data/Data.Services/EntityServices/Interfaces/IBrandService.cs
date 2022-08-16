@@ -12,7 +12,9 @@
     {
         public BrandDto[] GetAllBrands();
 
-        public BrandDto GetBrand(string brandId);
+        public BrandDto GetBrandByModelId(string modelId);
+
+        public BrandDto GetBrandByBrandId(string brandId);
 
         public void AddBrand(BrandDto brandDto);
 

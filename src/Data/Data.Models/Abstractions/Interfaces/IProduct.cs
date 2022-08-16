@@ -9,15 +9,21 @@
     {
         public Model Model { get; set; }
 
+        public string Processor { get; set; }
+
+        public string Ram { get; set; }
+
+        public string GPU { get; set; }
+
+        public string Storage { get; set; }
+
+        public string Display { get; set; }
+
         public decimal Price { get; set; }
 
         List<ImageFile> Images { get; set; }
 
         [MaxLength(300)]
         public string Description { get; set; }
-
-        public ICollection<Specification> Specifications { get; set; }
-
-        public Category Category { get; set; }
     }
 }

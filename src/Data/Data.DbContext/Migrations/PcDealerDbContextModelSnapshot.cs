@@ -157,6 +157,10 @@ namespace Data.DbContext.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("CategoryId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
 
@@ -176,6 +180,8 @@ namespace Data.DbContext.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BrandId");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Models");
                 });
@@ -212,10 +218,6 @@ namespace Data.DbContext.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CategoryId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
 
@@ -223,6 +225,14 @@ namespace Data.DbContext.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Display")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("GPU")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -242,15 +252,25 @@ namespace Data.DbContext.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("Processor")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<short>("Quantity")
                         .HasColumnType("smallint");
 
-                    b.Property<float>("Rating")
+                    b.Property<string>("Ram")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float?>("Rating")
                         .HasColumnType("real");
 
-                    b.HasKey("Id");
+                    b.Property<string>("Storage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("CategoryId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ModelId");
 
@@ -278,7 +298,7 @@ namespace Data.DbContext.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<float>("Rating")
+                    b.Property<float?>("Rating")
                         .HasColumnType("real");
 
                     b.Property<string>("UserId")
@@ -291,68 +311,6 @@ namespace Data.DbContext.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Reviews");
-                });
-
-            modelBuilder.Entity("Data.Models.Entities.Specification", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedAtUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("ModifiedAtUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ProductId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("TypeId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("TypeId");
-
-                    b.ToTable("Specifications");
-                });
-
-            modelBuilder.Entity("Data.Models.Entities.SpecificationType", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedAtUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("ModifiedAtUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SpecificationTypes");
                 });
 
             modelBuilder.Entity("Data.Models.Entities.User", b =>
@@ -588,12 +546,20 @@ namespace Data.DbContext.Migrations
             modelBuilder.Entity("Data.Models.Entities.Model", b =>
                 {
                     b.HasOne("Data.Models.Entities.Brand", "Brand")
-                        .WithMany("Models")
+                        .WithMany()
                         .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Data.Models.Entities.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Brand");
+
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("Data.Models.Entities.Order", b =>
@@ -605,17 +571,9 @@ namespace Data.DbContext.Migrations
 
             modelBuilder.Entity("Data.Models.Entities.Product", b =>
                 {
-                    b.HasOne("Data.Models.Entities.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Data.Models.Entities.Model", "Model")
                         .WithMany()
                         .HasForeignKey("ModelId");
-
-                    b.Navigation("Category");
 
                     b.Navigation("Model");
                 });
@@ -635,19 +593,6 @@ namespace Data.DbContext.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Data.Models.Entities.Specification", b =>
-                {
-                    b.HasOne("Data.Models.Entities.Product", null)
-                        .WithMany("Specifications")
-                        .HasForeignKey("ProductId");
-
-                    b.HasOne("Data.Models.Entities.SpecificationType", "Type")
-                        .WithMany()
-                        .HasForeignKey("TypeId");
-
-                    b.Navigation("Type");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -701,11 +646,6 @@ namespace Data.DbContext.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Data.Models.Entities.Brand", b =>
-                {
-                    b.Navigation("Models");
-                });
-
             modelBuilder.Entity("Data.Models.Entities.Order", b =>
                 {
                     b.Navigation("CartItems");
@@ -714,8 +654,6 @@ namespace Data.DbContext.Migrations
             modelBuilder.Entity("Data.Models.Entities.Product", b =>
                 {
                     b.Navigation("Images");
-
-                    b.Navigation("Specifications");
                 });
 
             modelBuilder.Entity("Data.Models.Entities.User", b =>

@@ -29,12 +29,22 @@
             return reviewDto;
         }
 
-        public void AddReview(string productId, ReviewDto reviewDto)
+        public void AddReview(ReviewDto reviewDto, string productId)
         {
+            bool exists = this.DbContext.Reviews.Any(r => r.Id == productId && r.IsDeleted == false);
+            if (!exists) throw new ArgumentException("Such product doesn't exist!");
+
             Review review = this.Mapper.Map<ReviewDto, Review>(reviewDto);
+
+            Product product = this.DbContext.Products.Where(p => p.Id == productId && p.IsDeleted == false).FirstOrDefault();
+
+            review.Product = product;
 
             this.DbContext.Reviews.Add(review);
             this.DbContext.SaveChanges();
+
+            reviewDto.CreatedAtUtc = DateTime.UtcNow;
+            reviewDto.ModifiedAtUtc = DateTime.UtcNow;
         }
 
         public void UpdateReview(ReviewDto updatedReviewDto)
@@ -46,6 +56,8 @@
 
             this.DbContext.Reviews.Update(review);
             this.DbContext.SaveChanges();
+
+            updatedReviewDto.ModifiedAtUtc = DateTime.UtcNow;
         }
 
         public void DeleteReview(string reviewId)

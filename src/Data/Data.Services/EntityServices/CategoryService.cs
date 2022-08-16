@@ -7,6 +7,8 @@
     using Data.Services.DtoModels;
     using Data.Services.EntityServices.Interfaces;
 
+    using Microsoft.EntityFrameworkCore;
+
     public class CategoryService : ICategoryService
     {
         public CategoryService(PcDealerDbContext dbContext, IMapper mapper)
@@ -21,12 +23,26 @@
 
         // TODO: Get product category
 
+        public CategoryDto GetCategory(string categoryId)
+        {
+            Category category = this.DbContext.Categories.Where(c => c.Id == categoryId && c.IsDeleted == false)
+                                                            .AsNoTracking()
+                                                            .FirstOrDefault();
+            CategoryDto categoryDto = this.Mapper.Map<Category, CategoryDto>(category);
+
+            return categoryDto;
+        }
+
         public void AddCategory(CategoryDto categoryDto)
         {
             Category category = this.Mapper.Map<CategoryDto, Category>(categoryDto);
+            
             this.DbContext.Categories.Add(category);
 
             this.DbContext.SaveChanges();
+
+            categoryDto.CreatedAtUtc = category.CreatedAtUtc;
+            categoryDto.ModifiedAtUtc = category.ModifiedAtUtc;
         }
 
         public void UpdateCategory(CategoryDto categoryDto)
@@ -38,6 +54,9 @@
             this.DbContext.Categories.Update(category);
 
             this.DbContext.SaveChanges();
+
+            categoryDto.CreatedAtUtc = category.CreatedAtUtc;
+            categoryDto.ModifiedAtUtc = category.ModifiedAtUtc;
         }
 
         public void DeleteCategory(string categoryId)

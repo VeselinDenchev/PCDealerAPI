@@ -4,7 +4,14 @@
 
     public class ImageDto : BaseDto
     {
-        // TODO: Constructor for setting properties
+        const string API_URL = "https://localhost:7168/";
+
+        public ImageDto(string fileName, string fileExtension)
+        {
+            this.FileName = fileName;
+            this.FileExtension = fileExtension;
+            this.Path = $"images/{this.FullFileName}";
+        }
 
         public ImageDto()
         {
@@ -24,6 +31,6 @@
         public string Path { get; set; }
 
         [JsonProperty(PropertyName = "url")]
-        public string? Url => "https://localhost:7168/" + this.Path;
+        public string? Url => API_URL + this.Path;
     }
 }

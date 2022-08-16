@@ -33,7 +33,7 @@
         [Route("get/{brandId}")]
         public IActionResult GetBrand([FromRoute] string brandId)
         {
-            BrandDto brand = this.BrandService.GetBrand(brandId);
+            BrandDto brand = this.BrandService.GetBrandByBrandId(brandId);
 
             if (brand is null) return NotFound("Such brand doesn't exist!");
 

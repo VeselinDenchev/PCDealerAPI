@@ -9,6 +9,6 @@
 
         public Product Product { get; set; }
 
-        public float Rating { get; set; }
+        public float? Rating { get; set; }
     }
 }
