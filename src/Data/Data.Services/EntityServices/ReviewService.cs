@@ -11,15 +11,18 @@
 
     public class ReviewService : IReviewService
     {
-        public ReviewService(PcDealerDbContext dbContext, IMapper mapper)
+        public ReviewService(PcDealerDbContext dbContext, IMapper mapper, IProductService productService)
         {
             this.DbContext = dbContext;
             this.Mapper = mapper;
+            this.ProductService = productService;
         }
 
         public PcDealerDbContext DbContext { get; init; }
 
-        public IMapper Mapper { get; set; }
+        public IMapper Mapper { get; init; }
+
+        public IProductService ProductService { get; init; }
 
         public ReviewDto[] GetAllReviewsForProduct(string productId)
         {
@@ -43,21 +46,19 @@
             return reviewDto;
         }
 
-        public void AddReview(ReviewDto reviewDto, string productId, string userId)
+        public void AddReview(ReviewDto reviewDto, string productId, string userName)
         {
-            bool exists = this.DbContext.Reviews.Any(r => r.Id == productId && r.IsDeleted == false);
+            bool exists = this.DbContext.Products.Any(p => p.Id == productId && p.IsDeleted == false);
             if (!exists) throw new ArgumentException("Such product doesn't exist!");
 
-            User user = this.DbContext.Users.Where(u => u.Id == userId).First();
+            User user = this.DbContext.Users.Where(u => u.UserName == userName).First();
 
             reviewDto.User = user;
+            reviewDto.Product = this.ProductService.GetProduct(productId);
 
             Review review = this.Mapper.Map<ReviewDto, Review>(reviewDto);
 
-            Product product = this.DbContext.Products.Where(p => p.Id == productId && p.IsDeleted == false).FirstOrDefault();
-
-            review.Product = product;
-
+            this.DbContext.Products.Attach(review.Product);
             this.DbContext.Reviews.Add(review);
             this.DbContext.SaveChanges();
 
@@ -65,10 +66,26 @@
             reviewDto.ModifiedAtUtc = DateTime.UtcNow;
         }
 
-        public void UpdateReview(ReviewDto updatedReviewDto)
+        public void UpdateReview(ReviewDto updatedReviewDto, string userName)
         {
             bool exists = this.DbContext.Reviews.Any(b => b.Id == updatedReviewDto.Id);
             if (!exists) throw new ArgumentException("Such review doesn't exist!");
+
+            string ownerUserName = this.DbContext.Reviews.Where(r => r.Id == updatedReviewDto.Id && r.IsDeleted == false)
+                                                            .AsNoTracking()
+                                                            .Include(r => r.User)
+                                                            .First().User.UserName;
+
+            bool isOwnedByThisUser = userName == ownerUserName;
+            if (!isOwnedByThisUser) throw new UnauthorizedAccessException("This user hasn't written this review!");
+
+            DateTime createdAtUtc = this.DbContext.Reviews.Where(r => r.Id == updatedReviewDto.Id && r.IsDeleted == false)
+                                                            .AsNoTracking()
+                                                            .First().CreatedAtUtc;
+            updatedReviewDto.CreatedAtUtc = createdAtUtc;
+
+            User user = this.DbContext.Users.Where(u => u.UserName == userName).AsNoTracking().First();
+            updatedReviewDto.User = user;
 
             Review review = this.Mapper.Map<ReviewDto, Review>(updatedReviewDto);
 

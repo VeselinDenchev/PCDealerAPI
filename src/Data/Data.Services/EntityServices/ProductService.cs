@@ -44,6 +44,7 @@
         {
             Product product = this.DbContext.Products
                                             .Where(p => p.Id == productId && p.IsDeleted == false && p.Model.IsDeleted == false)
+                                            .AsNoTracking()
                                             .Include(p => p.Model).ThenInclude(m => m.Brand)
                                             .Include(p => p.Model).ThenInclude(m => m.Category)
                                             .Include(p => p.Images.Where(i => i.IsDeleted == false))

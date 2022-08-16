@@ -7,10 +7,10 @@
     public class ReviewDto : BaseDto
     {
         [JsonProperty(PropertyName = "user")]
-        public User User { get; set; }
+        public User? User { get; set; }
 
         [JsonProperty(PropertyName = "product")]
-        public ProductDto Product { get; set; }
+        public ProductDto? Product { get; set; }
 
         [JsonProperty(PropertyName = "rating")]
         public float Rating { get; set; }
