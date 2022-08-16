@@ -1,11 +1,16 @@
 ﻿namespace Data.Services.DtoModels
 {
+    using Data.Models.Entities;
+
     using Newtonsoft.Json;
 
     public class OrderDto : BaseDto
     {
         [JsonProperty(PropertyName = "cartItems")]
         public ICollection<CartItemDto> CartItems { get; set; }
+
+        [JsonProperty(PropertyName = "user")]
+        public User? User { get; set; }
 
         public string? Status
         {

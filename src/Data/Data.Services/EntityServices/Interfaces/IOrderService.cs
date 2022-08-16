@@ -4,9 +4,11 @@
 
     public interface IOrderService
     {
+        public OrderDto[] GetAccountOrders(string userName);
+
         public OrderDto GetOrder(string orderId);
 
-        public void AddOrder(string userId, OrderDto orderDto);
+        public void AddOrder(OrderDto orderDto, string userId);
 
         public void DeleteOrder(string orderId);
     }

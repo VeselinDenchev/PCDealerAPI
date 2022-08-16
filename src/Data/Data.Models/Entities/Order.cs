@@ -9,6 +9,8 @@
     {
         public ICollection<CartItem> CartItems { get; set; }
 
+        public User User { get; set; }
+
         public string Status => DateTime.UtcNow > base.CreatedAtUtc.AddDays(3) ? "Completed" : "Pending";
     }
 }

@@ -34,7 +34,7 @@
         public decimal Price { get; set; }
 
         [JsonProperty(PropertyName = "images")]
-        public ICollection<ImageDto>? Images { get; set; }
+        public ImageDto[]? Images { get; set; }
 
         [JsonProperty(PropertyName = "description")]
         public string Description { get; set; }

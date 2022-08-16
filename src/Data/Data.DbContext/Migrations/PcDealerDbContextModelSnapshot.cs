@@ -45,7 +45,7 @@ namespace Data.DbContext.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brands");
+                    b.ToTable("Brands", (string)null);
                 });
 
             modelBuilder.Entity("Data.Models.Entities.CartItem", b =>
@@ -80,7 +80,7 @@ namespace Data.DbContext.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CartItems");
+                    b.ToTable("CartItems", (string)null);
                 });
 
             modelBuilder.Entity("Data.Models.Entities.Category", b =>
@@ -106,7 +106,7 @@ namespace Data.DbContext.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("Data.Models.Entities.ImageFile", b =>
@@ -145,7 +145,7 @@ namespace Data.DbContext.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ImageFiles");
+                    b.ToTable("ImageFiles", (string)null);
                 });
 
             modelBuilder.Entity("Data.Models.Entities.Model", b =>
@@ -183,7 +183,7 @@ namespace Data.DbContext.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Models");
+                    b.ToTable("Models", (string)null);
                 });
 
             modelBuilder.Entity("Data.Models.Entities.Order", b =>
@@ -210,7 +210,7 @@ namespace Data.DbContext.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("Data.Models.Entities.Product", b =>
@@ -274,7 +274,7 @@ namespace Data.DbContext.Migrations
 
                     b.HasIndex("ModelId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("Data.Models.Entities.Review", b =>
@@ -314,7 +314,7 @@ namespace Data.DbContext.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Reviews", (string)null);
                 });
 
             modelBuilder.Entity("Data.Models.Entities.User", b =>
