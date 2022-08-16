@@ -7,6 +7,8 @@
     using Data.Services.DtoModels;
     using Data.Services.EntityServices.Interfaces;
 
+    using Microsoft.EntityFrameworkCore;
+
     public class ReviewService : IReviewService
     {
         public ReviewService(PcDealerDbContext dbContext, IMapper mapper)
@@ -19,7 +21,19 @@
 
         public IMapper Mapper { get; set; }
 
-        // TODO: Get product reviews
+        public ReviewDto[] GetAllReviewsForProduct(string productId)
+        {
+            bool exists = this.DbContext.Products.Any(p => p.Id == productId && p.IsDeleted == false);
+            if (!exists) throw new ArgumentException("Such product doesn't exist!");
+
+            Review[] reviews = this.DbContext.Reviews.Where(r => r.Product.Id == productId && r.IsDeleted == false)
+                                                        .Include(r => r.User)
+                                                        .ToArray();
+
+            ReviewDto[] reviewDtos = this.Mapper.Map<Review[], ReviewDto[]>(reviews);
+
+            return reviewDtos;
+        }
 
         public ReviewDto GetReview(string reviewId)
         {
@@ -29,10 +43,14 @@
             return reviewDto;
         }
 
-        public void AddReview(ReviewDto reviewDto, string productId)
+        public void AddReview(ReviewDto reviewDto, string productId, string userId)
         {
             bool exists = this.DbContext.Reviews.Any(r => r.Id == productId && r.IsDeleted == false);
             if (!exists) throw new ArgumentException("Such product doesn't exist!");
+
+            User user = this.DbContext.Users.Where(u => u.Id == userId).First();
+
+            reviewDto.User = user;
 
             Review review = this.Mapper.Map<ReviewDto, Review>(reviewDto);
 

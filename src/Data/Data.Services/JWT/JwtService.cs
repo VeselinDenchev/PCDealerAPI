@@ -42,6 +42,7 @@
             );
 
             token = new JwtSecurityTokenHandler().WriteToken(jwtToken);
+
             return token;
         }
     }

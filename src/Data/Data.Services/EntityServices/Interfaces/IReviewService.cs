@@ -4,9 +4,11 @@
 
     public interface IReviewService
     {
+        public ReviewDto[] GetAllReviewsForProduct(string productId);
+
         public ReviewDto GetReview(string reviewId);
 
-        public void AddReview(ReviewDto reviewDto, string productId);
+        public void AddReview(ReviewDto reviewDto, string productId, string userId);
 
         public void UpdateReview(ReviewDto updatedReviewDto);
 

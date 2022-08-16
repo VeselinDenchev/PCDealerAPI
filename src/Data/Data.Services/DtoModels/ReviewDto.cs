@@ -14,5 +14,8 @@
 
         [JsonProperty(PropertyName = "rating")]
         public float Rating { get; set; }
+
+        [JsonProperty(PropertyName = "comment")]
+        public string Comment { get; set; }
     }
 }

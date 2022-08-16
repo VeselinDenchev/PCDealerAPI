@@ -10,5 +10,7 @@
         public Product Product { get; set; }
 
         public float? Rating { get; set; }
+
+        public string Comment { get; set; }
     }
 }

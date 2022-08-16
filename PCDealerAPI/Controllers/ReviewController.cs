@@ -3,9 +3,12 @@
     using Data.Services.DtoModels;
     using Data.Services.EntityServices.Interfaces;
 
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+
+    using System.Security.Claims;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -19,6 +22,7 @@
         public IReviewService ReviewService { get; set; }
 
         // TODO: Get all reviews for product
+
 
         [HttpGet]
         [EnableCors("MyCorsPolicy")]
@@ -35,9 +39,12 @@
         [HttpPost]
         [EnableCors("MyCorsPolicy")]
         [Route("product/{productId}/add")]
+        [Authorize]
         public IActionResult AddReview([FromRoute] string productId, [FromForm] ReviewDto review)
         {
-            this.ReviewService.AddReview(review, productId);
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            this.ReviewService.AddReview(review, productId, userId);
 
             return Ok(review);
         }
@@ -45,6 +52,7 @@
         [HttpPut]
         [EnableCors("MyCorsPolicy")]
         [Route("update/{reviewId}")]
+        [Authorize]
         public IActionResult UpdateReview(string reviewId, [FromForm] ReviewDto review)
         {
             try
@@ -64,6 +72,7 @@
         [HttpDelete]
         [EnableCors("MyCorsPolicy")]
         [Route("delete/{reviewId}")]
+        [Authorize]
         public IActionResult DeleteReview(string reviewId)
         {
             try
