@@ -17,8 +17,6 @@
 
         public ICategoryService CategoryService { get; init; }
 
-        // TODO: Get category for product
-
         [HttpPost]
         [EnableCors("MyCorsPolicy")]
         [Route("add")]

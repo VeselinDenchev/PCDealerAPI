@@ -28,7 +28,6 @@
         {
             var brands = this.DbContext.Brands
                                             .Where(b => b.IsDeleted == false)
-                                            //.Include(b => b.Models)
                                             .ToArray();
             var brandDtos = this.Mapper.Map<Brand[], BrandDto[]>(brands);
 
@@ -51,7 +50,6 @@
         {
             Brand brand = this.DbContext.Brands.Where(r => r.Id == brandId && r.IsDeleted == false)
                                                 .AsNoTracking()
-                                                //.Include(b => b.Models)
                                                 .FirstOrDefault();
             BrandDto brandDto = this.Mapper.Map<Brand, BrandDto>(brand);
 

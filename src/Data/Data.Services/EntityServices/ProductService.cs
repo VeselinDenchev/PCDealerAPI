@@ -40,6 +40,17 @@
             return productDtos;
         }
 
+        public ProductDto[] GetProductsByCategory(string categoryId)
+        {
+            Product[] products = this.DbContext.Products.Where(p => p.Model.Category.Id == categoryId && p.IsDeleted == false)
+                                                            .Include(p => p.Model).ThenInclude(m => m.Category)
+                                                            .ToArray();
+
+            ProductDto[] producDtos = this.Mapper.Map<Product[], ProductDto[]>(products);
+
+            return producDtos;
+        }
+
         public ProductDto GetProduct(string productId)
         {
             Product product = this.DbContext.Products

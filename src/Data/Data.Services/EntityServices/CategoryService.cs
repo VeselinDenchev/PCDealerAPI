@@ -21,8 +21,6 @@
 
         public IMapper Mapper { get; init; }
 
-        // TODO: Get product category
-
         public CategoryDto GetCategory(string categoryId)
         {
             Category category = this.DbContext.Categories.Where(c => c.Id == categoryId && c.IsDeleted == false)

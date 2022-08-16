@@ -33,6 +33,15 @@
             return Ok(products);
         }
 
+        [HttpGet]
+        [Route("category/{categoryId}/all")]
+        public IActionResult GetProductsByCategory(string categoryId)
+        {
+            ProductDto[] products = this.ProductsService.GetAllProducts();
+
+            return Ok(products);
+        }
+
 
         [HttpGet]
         [EnableCors("MyCorsPolicy")]
