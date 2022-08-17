@@ -9,7 +9,7 @@
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
 
-        [JsonProperty(PropertyName = "brandProductsCount")]
-        public int? BrandProductsCount { get; set; }
+        [JsonProperty(PropertyName = "productsCount")]
+        public int? ProductsCount { get; set; }
     }
 }

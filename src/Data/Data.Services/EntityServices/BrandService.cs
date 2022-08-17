@@ -31,7 +31,7 @@
 
             foreach (BrandDto brand in brandDtos)
             {
-                brand.BrandProductsCount = this.GetBrandProductsCount(brand.Id);
+                brand.ProductsCount = this.GetBrandProductsCount(brand.Id);
             }
 
             return brandDtos;
@@ -68,6 +68,7 @@
 
             brandDto.CreatedAtUtc = brand.CreatedAtUtc;
             brandDto.ModifiedAtUtc = brand.ModifiedAtUtc;
+            brandDto.ProductsCount = 0;
         }
 
         public void UpdateBrand(BrandDto updatedBrandDto)

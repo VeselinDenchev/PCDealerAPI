@@ -53,6 +53,11 @@
 
             ProductDto[] producDtos = this.Mapper.Map<Product[], ProductDto[]>(products);
 
+            foreach (ProductDto product in producDtos)
+            {
+                product.SalesCount = this.CalculateProductsSalesCount(product.Id);
+            }
+
             return producDtos;
         }
 
@@ -66,6 +71,8 @@
                                             .Include(p => p.Images.Where(i => i.IsDeleted == false))
                                             .FirstOrDefault();
             ProductDto productDto = this.Mapper.Map<Product, ProductDto>(product);
+
+            productDto.SalesCount = this.CalculateProductsSalesCount(productDto.Id);
 
             return productDto;
         }
