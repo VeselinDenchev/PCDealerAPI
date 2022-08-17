@@ -26,10 +26,13 @@
 
         public BrandDto[] GetAllBrands()
         {
-            var brands = this.DbContext.Brands
-                                            .Where(b => b.IsDeleted == false)
-                                            .ToArray();
+            var brands = this.DbContext.Brands.Where(b => b.IsDeleted == false).ToArray();
             var brandDtos = this.Mapper.Map<Brand[], BrandDto[]>(brands);
+
+            foreach (BrandDto brand in brandDtos)
+            {
+                brand.BrandProductsCount = this.GetBrandProductsCount(brand.Id);
+            }
 
             return brandDtos;
         }
@@ -104,6 +107,16 @@
             this.DbContext.Brands.Update(brand);
             this.DbContext.Models.UpdateRange(brandModels);
             this.DbContext.SaveChanges();
+        }
+
+        private int GetBrandProductsCount(string brandId)
+        {
+            int BrandProductsCount = this.DbContext.Products.Where(p => p.IsDeleted == false && p.Model.IsDeleted == false
+                                                                    && p.Model.Brand.IsDeleted == false)
+                                                                .Include(p => p.Model).ThenInclude(m => m.Brand)
+                                                                .Count(p => p.Model.Brand.Id == brandId);
+
+            return BrandProductsCount;
         }
     }
 }
