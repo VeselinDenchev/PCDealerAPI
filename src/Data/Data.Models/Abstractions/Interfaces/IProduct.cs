@@ -21,7 +21,7 @@
 
         public decimal Price { get; set; }
 
-        ImageFile[] Images { get; set; }
+        ICollection<ImageFile> Images { get; set; }
 
         [MaxLength(300)]
         public string Description { get; set; }

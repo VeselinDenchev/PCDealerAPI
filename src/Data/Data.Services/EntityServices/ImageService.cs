@@ -93,7 +93,7 @@
 
             if (product is null) return null;
 
-            ImageDto[] imagesDtos = this.Mapper.Map<ImageFile[], ImageDto[]>(product.Images);
+            ImageDto[] imagesDtos = this.Mapper.Map<ImageFile[], ImageDto[]>(product.Images.ToArray());
 
             return imagesDtos;
         }

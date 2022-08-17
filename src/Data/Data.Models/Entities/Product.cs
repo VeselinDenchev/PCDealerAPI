@@ -26,7 +26,7 @@
 
         public decimal Price { get; set; }
 
-        public ImageFile[] Images { get; set; }
+        public ICollection<ImageFile> Images { get; set; }
 
         public string Description { get; set; }
 

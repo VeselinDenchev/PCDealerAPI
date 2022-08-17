@@ -21,7 +21,7 @@
         public IProductService ProductService { get; init; }
 
         [HttpGet]
-        [Route("/image/{imageId}")]
+        [Route("image/{imageId}")]
         public IActionResult GetImageById([FromRoute] string imageId)
         {
             byte[] imageFileByteArray = this.ImagesService.GetImageFileBytesArray(imageId, out string FullFileName);
@@ -34,7 +34,7 @@
         }
 
         [HttpGet]
-        [Route("/image/all/{productId}")]
+        [Route("image/all/{productId}")]
         public IActionResult GetAllProductImagesFullNames([FromRoute] string productId)
         {
             ProductDto product = this.ProductService.GetProduct(productId);
