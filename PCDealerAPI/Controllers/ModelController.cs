@@ -37,7 +37,7 @@
 
         [HttpGet]
         [EnableCors("MyCorsPolicy")]
-        [Route("get/{modelId}")]
+        [Route("{modelId}")]
         public IActionResult GetModel([FromRoute] string modelId)
         {
             ModelDto brandModel = this.ModelService.GetModel(modelId);

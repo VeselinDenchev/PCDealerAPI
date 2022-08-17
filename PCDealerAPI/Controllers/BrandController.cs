@@ -20,7 +20,7 @@
         public IBrandService BrandService { get; set; }
 
         [HttpGet]
-        [Route("get/all")]
+        [Route("all")]
         public IActionResult GetAllBrands()
         {
             BrandDto[] brands = this.BrandService.GetAllBrands();
@@ -30,7 +30,7 @@
 
         [HttpGet]
         [EnableCors("MyCorsPolicy")]
-        [Route("get/{brandId}")]
+        [Route("{brandId}")]
         public IActionResult GetBrand([FromRoute] string brandId)
         {
             BrandDto brand = this.BrandService.GetBrandByBrandId(brandId);

@@ -24,7 +24,7 @@
 
         [HttpGet]
         [EnableCors("MyCorsPolicy")]
-        [Route("product/{productId}/get/all")]
+        [Route("product/{productId}/all")]
         public IActionResult GetAllReviewsForProduct([FromRoute] string productId)
         {
             try
@@ -43,7 +43,7 @@
 
         [HttpGet]
         [EnableCors("MyCorsPolicy")]
-        [Route("get/{reviewId}")]
+        [Route("{reviewId}")]
         public IActionResult GetReview([FromRoute] string reviewId)
         {
             ReviewDto review = this.ReviewService.GetReview(reviewId);

@@ -189,7 +189,7 @@
                 return BadRequest(e.Message);
             }
 
-            product.Images = imageDtos;
+            product.Images = imageDtos.ToArray();
 
             return Ok(product);
         }

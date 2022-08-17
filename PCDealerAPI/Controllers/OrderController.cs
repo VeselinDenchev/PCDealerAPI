@@ -25,7 +25,7 @@
 
         [HttpGet]
         [EnableCors("MyCorsPolicy")]
-        [Route("get/all")]
+        [Route("all")]
         public IActionResult GetUserOrders()
         {
             string userName = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -37,7 +37,7 @@
 
         [HttpGet]
         [EnableCors("MyCorsPolicy")]
-        [Route("get/{orderId}")]
+        [Route("{orderId}")]
         public IActionResult GetOrder([FromRoute] string orderId)
         {
             OrderDto order = this.OrderService.GetOrder(orderId);

@@ -9,7 +9,7 @@
     {
         public Product Product { get; set; }
 
-        [Range(0, short.MaxValue, ErrorMessage = "Quantity must be non negative!")]
+        [Range(0, short.MaxValue, ErrorMessage = "Quantity must be non-negative!")]
         public short Quantity { get; set; }
     }
 }
