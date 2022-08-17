@@ -25,6 +25,7 @@
         public IImageService ImagesService { get; init; }
 
         [HttpGet]
+        [EnableCors("MyCorsPolicy")]
         [Route("all")]
         public IActionResult GetAllProducts()
         {

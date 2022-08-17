@@ -4,7 +4,7 @@
 
     public class ImageDto : BaseDto
     {
-        const string API_URL = "https://localhost:7168/";
+        const string API_URL = "https://localhost:7282/";
 
         public ImageDto(string fileName, string fileExtension)
         {
