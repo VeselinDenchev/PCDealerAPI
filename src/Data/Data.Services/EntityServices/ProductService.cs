@@ -35,7 +35,12 @@
                                                 .Include(p => p.Model).ThenInclude(m => m.Category)
                                                 .Include(p => p.Images.Where(i => i.IsDeleted == false))
                                                 .ToArray();
-            var productDtos = this.Mapper.Map<Product[], ProductDto[]>(products);
+            ProductDto[] productDtos = this.Mapper.Map<Product[], ProductDto[]>(products);
+
+            foreach (ProductDto product in productDtos)
+            {
+                product.SalesCount = this.CalculateProductsSalesCount(product.Id);
+            }
 
             return productDtos;
         }
@@ -227,6 +232,27 @@
             {
                 Console.WriteLine($"Error while deleting {image.FullFileName}!");
             }
+        }
+
+        private int CalculateProductsSalesCount(string productId)
+        {
+            int productsSalesCount = 0;
+
+            foreach (Order order in this.DbContext.Orders.Include(o => o.CartItems).ThenInclude(o => o.Product))
+            {
+                foreach (CartItem cartItem in order.CartItems)
+                {
+                    Product product = cartItem.Product;
+
+                    bool wasInCart = product.Id == productId;
+                    if (wasInCart)
+                    {
+                        productsSalesCount += product.Quantity;
+                    }
+                }
+            }
+
+            return productsSalesCount;
         }
     }
 }

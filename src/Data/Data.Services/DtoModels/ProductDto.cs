@@ -42,5 +42,8 @@
         [JsonProperty(PropertyName = "quantity")]
         [Range(0, short.MaxValue, ErrorMessage = "Quantity must be non negative!")]
         public short Quantity { get; set; }
+
+        [JsonProperty(PropertyName = "salesCount")]
+        public int? SalesCount { get; set; }
     }
 }
