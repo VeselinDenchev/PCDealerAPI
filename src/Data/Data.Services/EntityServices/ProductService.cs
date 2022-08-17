@@ -89,6 +89,8 @@
             productDto.CreatedAtUtc = product.CreatedAtUtc;
             productDto.ModifiedAtUtc = product.ModifiedAtUtc;
 
+            productDto.SalesCount = 0;
+
             foreach (ImageDto image in productDto.Images)
             {
                 image.CreatedAtUtc = product.CreatedAtUtc;
@@ -182,6 +184,8 @@
 
             updatedProductDto.CreatedAtUtc = productCreatedAtUtc;
             updatedProductDto.ModifiedAtUtc = product.ModifiedAtUtc;
+
+            updatedProductDto.SalesCount = this.CalculateProductsSalesCount(updatedProductDto.Id);
 
             foreach (ImageDto image in updatedProductDto.Images)
             {
