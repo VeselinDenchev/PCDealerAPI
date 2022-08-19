@@ -62,7 +62,7 @@
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] LoginViewModel loginModel)
+        public async Task<IActionResult> Login([FromForm] LoginViewModel loginModel)
         {
             var checkUser = await UserManager.FindByEmailAsync(loginModel.Email);
 
@@ -79,7 +79,7 @@
 
                 if (checkPassword.Succeeded && token.Length > 0)
                 {
-                    return Ok(token);
+                    return Ok(new {email = checkUser.Email, accessToken = token });
                 }
 
                 return BadRequest("Wrong password or token error!");
