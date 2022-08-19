@@ -79,7 +79,16 @@
 
                 if (checkPassword.Succeeded && token.Length > 0)
                 {
-                    return Ok(new {email = checkUser.Email, accessToken = token });
+                    return Ok(
+                        new 
+                        {
+                            firstName=checkUser.FirstName, 
+                            lastName=checkUser.LastName,  
+                            email = checkUser.Email,
+                            mobileNumber = checkUser.PhoneNumber,
+                            address = checkUser.Address,
+                            accessToken = token 
+                        });
                 }
 
                 return BadRequest("Wrong password or token error!");
