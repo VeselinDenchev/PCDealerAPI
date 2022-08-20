@@ -2,23 +2,26 @@
 {
     using System.ComponentModel.DataAnnotations;
 
+    using Newtonsoft.Json;
+
     public class RegisterViewModel
     {
-        private const string CONFIRM_PASSWORD_STRING = "ConfirmPassword";
-
+        [JsonProperty(PropertyName = "firstName")]
         public string FirstName { get; set; }
 
+        [JsonProperty(PropertyName = "lastName")]
         public string LastName { get; set; }
 
+        [JsonProperty(PropertyName = "email")]
         public string Email { get; set; }
 
+        [JsonProperty(PropertyName = "phoneNumber")]
         public string PhoneNumber { get; set; }
 
+        [JsonProperty(PropertyName = "address")]
         public string Address { get; set; }
 
-        [Compare(CONFIRM_PASSWORD_STRING)]
+        [JsonProperty(PropertyName = "password")]
         public string Password { get; set; }
-
-        public string ConfirmPassword { get; set; }
     }
 }

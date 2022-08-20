@@ -11,6 +11,14 @@
 
         public User User { get; set; }
 
+        public string? FirstName { get; set; }
+
+        public string? LastName { get; set; }
+
+        public string? Address { get; set; }
+
+        public decimal? SubTotal { get; set; }
+
         public string Status => DateTime.UtcNow > base.CreatedAtUtc.AddDays(3) ? "Completed" : "Pending";
     }
 }

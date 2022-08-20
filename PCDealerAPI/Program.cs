@@ -40,6 +40,7 @@ builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.Configure<TokenModel>(builder.Configuration.GetSection("JWT"));

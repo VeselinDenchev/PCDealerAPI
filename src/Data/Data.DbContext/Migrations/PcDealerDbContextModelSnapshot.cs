@@ -45,7 +45,7 @@ namespace Data.DbContext.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brands", (string)null);
+                    b.ToTable("Brands");
                 });
 
             modelBuilder.Entity("Data.Models.Entities.CartItem", b =>
@@ -80,7 +80,7 @@ namespace Data.DbContext.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CartItems", (string)null);
+                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("Data.Models.Entities.Category", b =>
@@ -106,7 +106,7 @@ namespace Data.DbContext.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Data.Models.Entities.ImageFile", b =>
@@ -145,7 +145,7 @@ namespace Data.DbContext.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ImageFiles", (string)null);
+                    b.ToTable("ImageFiles");
                 });
 
             modelBuilder.Entity("Data.Models.Entities.Model", b =>
@@ -183,7 +183,7 @@ namespace Data.DbContext.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Models", (string)null);
+                    b.ToTable("Models");
                 });
 
             modelBuilder.Entity("Data.Models.Entities.Order", b =>
@@ -191,17 +191,29 @@ namespace Data.DbContext.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DeletedAtUtc")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("ModifiedAtUtc")
                         .HasColumnType("datetime2");
+
+                    b.Property<decimal?>("SubTotal")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -210,7 +222,7 @@ namespace Data.DbContext.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Data.Models.Entities.Product", b =>
@@ -274,7 +286,7 @@ namespace Data.DbContext.Migrations
 
                     b.HasIndex("ModelId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Data.Models.Entities.Review", b =>
@@ -314,7 +326,7 @@ namespace Data.DbContext.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Reviews", (string)null);
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("Data.Models.Entities.User", b =>
@@ -568,9 +580,11 @@ namespace Data.DbContext.Migrations
 
             modelBuilder.Entity("Data.Models.Entities.Order", b =>
                 {
-                    b.HasOne("Data.Models.Entities.User", null)
-                        .WithMany("Orders")
+                    b.HasOne("Data.Models.Entities.User", "User")
+                        .WithMany()
                         .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Data.Models.Entities.Product", b =>
@@ -658,11 +672,6 @@ namespace Data.DbContext.Migrations
             modelBuilder.Entity("Data.Models.Entities.Product", b =>
                 {
                     b.Navigation("Images");
-                });
-
-            modelBuilder.Entity("Data.Models.Entities.User", b =>
-                {
-                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

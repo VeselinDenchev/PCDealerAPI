@@ -1,10 +1,15 @@
 ﻿namespace PCDealerAPI.Controllers
 {
+    using System.Security.Claims;
+
     using Data.Models.Entities;
     using Data.Services.DtoModels.Jwt;
+    using Data.Services.EntityServices.Interfaces;
     using Data.Services.JWT.Interfaces;
     using Data.Services.ViewModels;
 
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
@@ -12,11 +17,13 @@
     [ApiController]
     public class AccountController : ControllerBase
     {
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, IJwtService jwtService)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, IJwtService jwtService,
+                                    IUserService userService)
         {
             this.UserManager = userManager;
             this.SignInManager = signInManager;
             this.JwtService = jwtService;
+            this.UserService = userService;
         }
 
         public UserManager<User> UserManager { get; set; }
@@ -25,9 +32,20 @@
 
         public IJwtService JwtService { get; set; }
 
+        public IUserService UserService { get; init; }
+
+        [HttpGet]
+        [Route("getUserEmails")]
+        public async Task<IActionResult> GetUserEmails()
+        {
+            string[] userEmails = this.UserManager.Users.Select(u => u.Email).ToArray();
+
+            return Ok(userEmails);
+        }
+
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterViewModel registerModel)
+        public async Task<IActionResult> Register([FromForm] RegisterViewModel registerModel)
         {
             var checkUser = await UserManager.FindByEmailAsync(registerModel.Email);
             if (checkUser is null)
@@ -42,22 +60,22 @@
                     Address = registerModel.Address,
                 };
 
-                var token = JwtService.GenerateUserToken(new RequestTokenModel()
-                {
-                    Email = newUser.Email,
-                    UserName = newUser.UserName,
-                });
+                //var token = JwtService.GenerateUserToken(new RequestTokenModel()
+                //{
+                //    Email = newUser.Email,
+                //    UserName = newUser.UserName,
+                //});
 
                 var result = await UserManager.CreateAsync(newUser, registerModel.Password);
 
-                if (result.Succeeded && token.Length > 0)
+                if (result.Succeeded)
                 {
-                    return Ok(token);
+                    return Ok();
                 }
-                return BadRequest("Register attempt failed! Please, check email and passowrd!");
+                return BadRequest("Register attempt failed! Please, check email and password!");
             }
 
-            return BadRequest("Invalid register data!");
+            return BadRequest("Such user already exists!");
         }
 
         [HttpPost]
@@ -96,5 +114,99 @@
 
             return BadRequest("No such user!");
         }
+
+        //[HttpPut]
+        //[Route("update")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //public async Task<IActionResult> UpdateAccount([FromForm] UpdateAccountViewModel updateAccountModel)
+        //{
+        //    string userName = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        //    User user = this.UserService.GetUserByUserName(userName);
+
+        //    if (user.Email != updateAccountModel.Email)
+        //    {
+        //        bool emailIsAlreadyRegistered = this.UserManager.Users.Select(u => u.Email).Any(e => e == updateAccountModel.Email);
+        //        if (emailIsAlreadyRegistered) return BadRequest("User with this email is already registered");
+        //    }
+
+        //    User updatedUser = new User();
+        //    updatedUser.Id = user.Id;
+        //    updatedUser.FirstName = updateAccountModel.FirstName;
+        //    updatedUser.LastName = updateAccountModel.LastName;
+        //    updatedUser.Email = updateAccountModel.Email;
+        //    updatedUser.UserName = updateAccountModel.Email;
+        //    updatedUser.PhoneNumber = updateAccountModel.PhoneNumber;
+        //    updatedUser.Address = updateAccountModel.Address;
+
+        //    var result = await this.UserManager.UpdateAsync(updatedUser);
+
+        //    var token = Request.Headers["Authorization"];
+
+        //    if (result.Succeeded)
+        //    {
+        //        return Ok(
+        //            new
+        //            {
+        //                firstName = updatedUser.FirstName,
+        //                lastName = updatedUser.LastName,
+        //                email = updatedUser.Email,
+        //                mobileNumber = updatedUser.PhoneNumber,
+        //                address = updatedUser.Address,
+        //                accessToken = token
+        //            }
+        //        );
+        //    }
+                
+
+        //    return BadRequest();
+        //}
+
+        //[HttpPut]
+        //[Route("changePassword")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //public async Task<IActionResult> ChangePassword([FromForm] string newPassowrd)
+        //{
+        //    string userName = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        //    User user = this.UserService.GetUserByUserName(userName);
+
+        //    if (user.Email != updateAccountModel.Email)
+        //    {
+        //        bool emailIsAlreadyRegistered = this.UserManager.Users.Select(u => u.Email).Any(e => e == updateAccountModel.Email);
+        //        if (emailIsAlreadyRegistered) return BadRequest("User with this email is already registered");
+        //    }
+
+        //    User updatedUser = new User();
+        //    updatedUser.Id = user.Id;
+        //    updatedUser.FirstName = updateAccountModel.FirstName;
+        //    updatedUser.LastName = updateAccountModel.LastName;
+        //    updatedUser.Email = updateAccountModel.Email;
+        //    updatedUser.UserName = updateAccountModel.Email;
+        //    updatedUser.PhoneNumber = updateAccountModel.PhoneNumber;
+        //    updatedUser.Address = updateAccountModel.Address;
+
+        //    var result = await this.UserManager.UpdateAsync(updatedUser);
+
+        //    var token = Request.Headers["Authorization"];
+
+        //    if (result.Succeeded)
+        //    {
+        //        return Ok(
+        //            new
+        //            {
+        //                firstName = updatedUser.FirstName,
+        //                lastName = updatedUser.LastName,
+        //                email = updatedUser.Email,
+        //                mobileNumber = updatedUser.PhoneNumber,
+        //                address = updatedUser.Address,
+        //                accessToken = token
+        //            }
+        //        );
+        //    }
+
+
+        //    return BadRequest();
+        //}
     }
 }
