@@ -71,10 +71,10 @@ builder.Services.AddAuthentication(a =>
     {
         ValidateIssuer = true,
         ValidateAudience = true,
-        ValidAudience = builder.Configuration["JWT" + ':' + "ValidateAudience"],
-        ValidIssuer = builder.Configuration["JWT" + ':' + "ValidateIssuer"],
+        ValidAudience = builder.Configuration["JWT:" + "ValidateAudience"],
+        ValidIssuer = builder.Configuration["JWT:" + "ValidateIssuer"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
-                                .GetBytes(builder.Configuration["JWT" + ':' + "TokenSecret"]))
+                                .GetBytes(builder.Configuration["JWT:" + "TokenSecret"]))
     };
 });
 

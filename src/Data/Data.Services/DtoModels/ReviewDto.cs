@@ -17,5 +17,11 @@
 
         [JsonProperty(PropertyName = "comment")]
         public string Comment { get; set; }
+
+        [JsonProperty(PropertyName = "madeOnDate")]
+        public string? MadeOnDate =>
+            base.CreatedAtUtc.HasValue
+            ? DateTime.Parse(base.CreatedAtUtc.ToString()).ToLocalTime().ToString("dd/MM/yyyy HH:mm")
+            : null;
     }
 }

@@ -72,6 +72,8 @@
                                             .FirstOrDefault();
             ProductDto productDto = this.Mapper.Map<Product, ProductDto>(product);
 
+            this.DbContext.Entry(product).State = EntityState.Detached;
+
             productDto.SalesCount = this.CalculateProductsSalesCount(productDto.Id);
 
             return productDto;
@@ -249,7 +251,7 @@
         {
             int productsSalesCount = 0;
 
-            foreach (Order order in this.DbContext.Orders.Include(o => o.CartItems).ThenInclude(o => o.Product))
+            foreach (Order order in this.DbContext.Orders.AsNoTracking().Include(o => o.CartItems).ThenInclude(o => o.Product))
             {
                 foreach (CartItem cartItem in order.CartItems)
                 {

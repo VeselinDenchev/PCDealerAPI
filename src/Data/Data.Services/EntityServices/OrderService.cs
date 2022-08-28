@@ -28,6 +28,14 @@
                                                     .Include(o => o.CartItems).ThenInclude(ci => ci.Product).ThenInclude(p => p.Images)
                                                     .ToArray();
 
+            foreach (var order in orders)
+            {
+                foreach (var cartItem in order.CartItems)
+                {
+                    this.DbContext.Entry(cartItem.Product).State = EntityState.Detached;
+                }
+            }
+
             OrderDto[] orderDtos =  this.Mapper.Map<Order[], OrderDto[]>(orders);
 
             return orderDtos;
@@ -73,6 +81,13 @@
             this.DbContext.Orders.Add(order);
 
             this.DbContext.Entry(order.User).State = EntityState.Detached;
+
+            List<Product> productsToBeDetached = new List<Product>();
+            foreach (var item in order.CartItems)
+            {
+                this.DbContext.Entry(item.Product).State = EntityState.Detached;
+            }
+
 
             this.DbContext.Products.UpdateRange(buyedProducts);
 

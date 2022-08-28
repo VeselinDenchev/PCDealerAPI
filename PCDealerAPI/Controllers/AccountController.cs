@@ -100,6 +100,7 @@
                     return Ok(
                         new 
                         {
+                            id = checkUser.Id,
                             firstName=checkUser.FirstName, 
                             lastName=checkUser.LastName,  
                             email = checkUser.Email,

@@ -31,6 +31,7 @@
 
             Review[] reviews = this.DbContext.Reviews.Where(r => r.Product.Id == productId && r.IsDeleted == false)
                                                         .Include(r => r.User)
+                                                        .Include(r => r.Product)
                                                         .ToArray();
 
             ReviewDto[] reviewDtos = this.Mapper.Map<Review[], ReviewDto[]>(reviews);
@@ -48,18 +49,27 @@
 
         public void AddReview(ReviewDto reviewDto, string productId, string userName)
         {
-            bool exists = this.DbContext.Products.Any(p => p.Id == productId && p.IsDeleted == false);
+            bool exists = this.DbContext.Products.AsNoTracking().Any(p => p.Id == productId && p.IsDeleted == false);
             if (!exists) throw new ArgumentException("Such product doesn't exist!");
 
+
             User user = this.DbContext.Users.Where(u => u.UserName == userName).First();
+
 
             reviewDto.User = user;
             reviewDto.Product = this.ProductService.GetProduct(productId);
 
             Review review = this.Mapper.Map<ReviewDto, Review>(reviewDto);
 
+            this.DbContext.Entry(review.Product).State = EntityState.Detached;
+
+            this.DbContext.Brands.Attach(review.Product.Model.Brand);
+            this.DbContext.Categories.Attach(review.Product.Model.Category);
+            this.DbContext.Models.Attach(review.Product.Model);
             this.DbContext.Products.Attach(review.Product);
+
             this.DbContext.Reviews.Add(review);
+
             this.DbContext.SaveChanges();
 
             reviewDto.CreatedAtUtc = DateTime.UtcNow;

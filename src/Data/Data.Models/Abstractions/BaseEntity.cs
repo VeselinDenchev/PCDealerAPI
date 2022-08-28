@@ -6,10 +6,10 @@
     {
         public BaseEntity()
         {
-            Id = Guid.NewGuid().ToString();
-            CreatedAtUtc = DateTime.UtcNow;
-            ModifiedAtUtc = DateTime.UtcNow;
-            IsDeleted = false;
+            this.Id = Guid.NewGuid().ToString();
+            this.CreatedAtUtc = DateTime.UtcNow;
+            this.ModifiedAtUtc = DateTime.UtcNow;
+            this.IsDeleted = false;
         }
 
         public string Id { get; set; }
