@@ -1,22 +1,24 @@
 ﻿namespace Data.Services.ViewModels
 {
+    using Constants;
+
     using Newtonsoft.Json;
 
     public class UpdateAccountViewModel
     {
-        [JsonProperty(PropertyName = "firstName")]
+        [JsonProperty(PropertyName = JsonConstant.FIRST_NAME_PROPERTY)]
         public string FirstName { get; set; }
 
-        [JsonProperty(PropertyName = "lastName")]
+        [JsonProperty(PropertyName = JsonConstant.LAST_NAME_PROPERTY)]
         public string LastName { get; set; }
 
-        [JsonProperty(PropertyName = "email")]
+        [JsonProperty(PropertyName = JsonConstant.EMAIL_PROPERTY)]
         public string Email { get; set; }
 
-        [JsonProperty(PropertyName = "phoneNumber")]
+        [JsonProperty(PropertyName = JsonConstant.PHONE_NUMBER_PROPERTY)]
         public string PhoneNumber { get; set; }
 
-        [JsonProperty(PropertyName = "address")]
+        [JsonProperty(PropertyName = JsonConstant.ADDRESS_PROPERTY)]
         public string Address { get; set; }
     }
 }

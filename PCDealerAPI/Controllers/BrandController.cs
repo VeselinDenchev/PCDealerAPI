@@ -1,14 +1,13 @@
 ﻿namespace PCDealerAPI.Controllers
 {
+    using Constants;
+
     using Data.Services.DtoModels;
     using Data.Services.EntityServices.Interfaces;
 
-    using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Mvc;
 
-    using Newtonsoft.Json;
-
-    [Route("api/[controller]")]
+    [Route(ControllerConstant.CONTROLLER_BASE_ROUTE)]
     [ApiController]
     public class BrandController : ControllerBase
     {
@@ -20,7 +19,7 @@
         public IBrandService BrandService { get; set; }
 
         [HttpGet]
-        [Route("all")]
+        [Route(ControllerConstant.ALL_ROUTE)]
         public IActionResult GetAllBrands()
         {
             BrandDto[] brands = this.BrandService.GetAllBrands();
@@ -29,20 +28,18 @@
         }
 
         [HttpGet]
-        [EnableCors("MyCorsPolicy")]
-        [Route("{brandId}")]
+        [Route(ControllerConstant.BRAND_ID_PARAMETER)]
         public IActionResult GetBrand([FromRoute] string brandId)
         {
             BrandDto brand = this.BrandService.GetBrandByBrandId(brandId);
 
-            if (brand is null) return NotFound("Such brand doesn't exist!");
+            if (brand is null) return NotFound(ErrorMessage.NON_EXISTING_BRAND_MESSAGE);
 
             return Ok(brand);
         }
 
         [HttpPost]
-        [EnableCors("MyCorsPolicy")]
-        [Route("add")]
+        [Route(ControllerConstant.ADD_ROUTE)]
         public IActionResult AddBrand([FromForm] BrandDto brand)
         {
             this.BrandService.AddBrand(brand);
@@ -51,8 +48,7 @@
         }
 
         [HttpPut]
-        [EnableCors("MyCorsPolicy")]
-        [Route("update/{brandId}")]
+        [Route(ControllerConstant.UPDATE_ROUTE + ControllerConstant.BRAND_ID_PARAMETER)]
         public IActionResult UpdateBrand([FromRoute] string brandId, [FromForm] BrandDto brand)
         {
             try
@@ -71,21 +67,20 @@
         }
 
         [HttpDelete]
-        [Route("delete/{brandId}")]
+        [Route(ControllerConstant.DELETE_ROUTE + ControllerConstant.BRAND_ID_PARAMETER)]
         public IActionResult DeleteBrand([FromRoute] string brandId)
         {
             try
             {
                 this.BrandService.DeleteBrand(brandId);
 
-                return Ok("Brand successfully deleted!");
+                return Ok(InfoMessage.BRAND_SUCCESSFULLY_DELETED_MESSAGE);
 
             }
             catch (ArgumentException ae)
             {
                 return NotFound(ae.Message);
             }
-
         }
     }
 }

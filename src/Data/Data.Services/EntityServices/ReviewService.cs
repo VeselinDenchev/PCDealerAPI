@@ -2,6 +2,8 @@
 {
     using AutoMapper;
 
+    using Constants;
+
     using Data.DbContext;
     using Data.Models.Entities;
     using Data.Services.DtoModels;
@@ -27,7 +29,7 @@
         public ReviewDto[] GetAllReviewsForProduct(string productId)
         {
             bool exists = this.DbContext.Products.Any(p => p.Id == productId && p.IsDeleted == false);
-            if (!exists) throw new ArgumentException("Such product doesn't exist!");
+            if (!exists) throw new ArgumentException(ErrorMessage.NON_EXISTING_PRODUCT_MESSAGE);
 
             Review[] reviews = this.DbContext.Reviews.Where(r => r.Product.Id == productId && r.IsDeleted == false)
                                                         .Include(r => r.User)
@@ -50,7 +52,7 @@
         public void AddReview(ReviewDto reviewDto, string productId, string userName)
         {
             bool exists = this.DbContext.Products.AsNoTracking().Any(p => p.Id == productId && p.IsDeleted == false);
-            if (!exists) throw new ArgumentException("Such product doesn't exist!");
+            if (!exists) throw new ArgumentException(ErrorMessage.NON_EXISTING_PRODUCT_MESSAGE);
 
 
             User user = this.DbContext.Users.Where(u => u.UserName == userName).First();
@@ -79,7 +81,7 @@
         public void UpdateReview(ReviewDto updatedReviewDto, string userName)
         {
             bool exists = this.DbContext.Reviews.Any(b => b.Id == updatedReviewDto.Id);
-            if (!exists) throw new ArgumentException("Such review doesn't exist!");
+            if (!exists) throw new ArgumentException(ErrorMessage.NON_EXISTING_REVIEW_MESSAGE);
 
             string ownerUserName = this.DbContext.Reviews.Where(r => r.Id == updatedReviewDto.Id && r.IsDeleted == false)
                                                             .AsNoTracking()
@@ -87,7 +89,7 @@
                                                             .First().User.UserName;
 
             bool isOwnedByThisUser = userName == ownerUserName;
-            if (!isOwnedByThisUser) throw new UnauthorizedAccessException("This user hasn't written this review!");
+            if (!isOwnedByThisUser) throw new UnauthorizedAccessException(ErrorMessage.REVIEW_UNAUTHORIZED_ACCESS_MESSAGE);
 
             DateTime createdAtUtc = this.DbContext.Reviews.Where(r => r.Id == updatedReviewDto.Id && r.IsDeleted == false)
                                                             .AsNoTracking()
@@ -108,7 +110,7 @@
         public void DeleteReview(string reviewId)
         {
             bool exists = this.DbContext.Reviews.Any(b => b.Id == reviewId);
-            if (!exists) throw new ArgumentException("Such review doesn't exist!");
+            if (!exists) throw new ArgumentException(ErrorMessage.NON_EXISTING_REVIEW_MESSAGE);
 
             Review review = this.DbContext.Reviews.Where(r => r.Id == reviewId && r.IsDeleted == false).First();
 

@@ -1,12 +1,13 @@
 ﻿namespace PCDealerAPI.Controllers
 {
+    using Constants;
+
     using Data.Services.DtoModels;
     using Data.Services.EntityServices.Interfaces;
 
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
-    [Route("api/[controller]")]
+    [Route(ControllerConstant.CONTROLLER_BASE_ROUTE)]
     [ApiController]
     public class ImageController : ControllerBase
     {
@@ -21,20 +22,20 @@
         public IProductService ProductService { get; init; }
 
         [HttpGet]
-        [Route("image/{imageId}")]
-        public IActionResult GetImageById([FromRoute] string imageId)
+        [Route(ControllerConstant.IMAGE_ID_PARAMETER)]
+        public IActionResult GetImage([FromRoute] string imageId)
         {
             byte[] imageFileByteArray = this.ImagesService.GetImageFileBytesArray(imageId, out string FullFileName);
 
-            string fileMimeType = this.GetMimeType(FullFileName);
+            string fileMimeType = this.ImagesService.GetMimeType(FullFileName);
 
             if (imageFileByteArray is not null) return File(imageFileByteArray, fileMimeType);
 
-            return NotFound("Invalid image id!");
+            return NotFound(ErrorMessage.INVALID_IMAGE_ID_MESSAGE);
         }
 
         [HttpGet]
-        [Route("image/all/{productId}")]
+        [Route($"{ControllerConstant.ALL_ROUTE}/{ControllerConstant.PRODUCT_ID_PARAMETER}")]
         public IActionResult GetAllProductImagesFullNames([FromRoute] string productId)
         {
             ProductDto product = this.ProductService.GetProduct(productId);
@@ -46,23 +47,7 @@
                 return Ok(imagesFullNames);
             }
 
-            return NotFound("Invalid product!");
-        }
-
-        // https://stackoverflow.com/questions/1029740/get-mime-type-from-filename-extension
-        // Works only on Windows
-        [NonAction]
-        private string GetMimeType(string fileName)
-        {
-            string mimeType = "application/unknown";
-            string ext = Path.GetExtension(fileName).ToLower();
-            Microsoft.Win32.RegistryKey regKey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(ext);
-            if (regKey != null && regKey.GetValue("Content Type") != null)
-            {
-                mimeType = regKey.GetValue("Content Type").ToString();
-            }
-
-            return mimeType;
+            return NotFound(ErrorMessage.NON_EXISTING_PRODUCT_MESSAGE);
         }
     }
 }

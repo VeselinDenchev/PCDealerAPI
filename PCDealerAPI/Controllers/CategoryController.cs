@@ -1,12 +1,13 @@
 ﻿namespace PCDealerAPI.Controllers
 {
+    using Constants;
+
     using Data.Services.DtoModels;
     using Data.Services.EntityServices.Interfaces;
 
-    using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Mvc;
 
-    [Route("api/[controller]")]
+    [Route(ControllerConstant.CONTROLLER_BASE_ROUTE)]
     [ApiController]
     public class CategoryController : ControllerBase
     {
@@ -18,8 +19,7 @@
         public ICategoryService CategoryService { get; init; }
 
         [HttpPost]
-        [EnableCors("MyCorsPolicy")]
-        [Route("add")]
+        [Route(ControllerConstant.ADD_ROUTE)]
         public IActionResult AddCategory([FromForm] CategoryDto category)
         {
             this.CategoryService.AddCategory(category);
@@ -28,8 +28,7 @@
         }
 
         [HttpPut]
-        [EnableCors("MyCorsPolicy")]
-        [Route("update/{categoryId}")]
+        [Route(ControllerConstant.UPDATE_ROUTE + ControllerConstant.CATEGORY_ID_PARAMETER)]
         public IActionResult UpdateCategory(string categoryId, [FromForm] CategoryDto category)
         {
             try
@@ -47,15 +46,14 @@
         }
 
         [HttpDelete]
-        [EnableCors("MyCorsPolicy")]
-        [Route("delete/{categoryId}")]
+        [Route(ControllerConstant.DELETE_ROUTE + ControllerConstant.CATEGORY_ID_PARAMETER)]
         public IActionResult DeleteCategory(string categoryId)
         {
             try
             {
                 this.CategoryService.DeleteCategory(categoryId);
 
-                return Ok("The category is successfully deleted");
+                return Ok(InfoMessage.CATEGORY_SUCCESSFULLY_DELETED_MESSAGE);
             }
             catch (ArgumentException ae)
             {

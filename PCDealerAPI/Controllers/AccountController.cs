@@ -1,6 +1,6 @@
 ﻿namespace PCDealerAPI.Controllers
 {
-    using System.Security.Claims;
+    using Constants;
 
     using Data.Models.Entities;
     using Data.Services.DtoModels.Jwt;
@@ -8,12 +8,10 @@
     using Data.Services.JWT.Interfaces;
     using Data.Services.ViewModels;
 
-    using Microsoft.AspNetCore.Authentication.JwtBearer;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
-    [Route("api/[controller]")]
+    [Route(ControllerConstant.CONTROLLER_BASE_ROUTE)]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -35,7 +33,7 @@
         public IUserService UserService { get; init; }
 
         [HttpGet]
-        [Route("getUserEmails")]
+        [Route(ControllerConstant.GET_USER_EMAILS_ROUTE)]
         public async Task<IActionResult> GetUserEmails()
         {
             string[] userEmails = this.UserManager.Users.Select(u => u.Email).ToArray();
@@ -44,7 +42,7 @@
         }
 
         [HttpPost]
-        [Route("register")]
+        [Route(ControllerConstant.REGISTER_ROUTE)]
         public async Task<IActionResult> Register([FromForm] RegisterViewModel registerModel)
         {
             var checkUser = await UserManager.FindByEmailAsync(registerModel.Email);
@@ -60,26 +58,20 @@
                     Address = registerModel.Address,
                 };
 
-                //var token = JwtService.GenerateUserToken(new RequestTokenModel()
-                //{
-                //    Email = newUser.Email,
-                //    UserName = newUser.UserName,
-                //});
-
                 var result = await UserManager.CreateAsync(newUser, registerModel.Password);
 
                 if (result.Succeeded)
                 {
                     return Ok();
                 }
-                return BadRequest("Register attempt failed! Please, check email and password!");
+                return BadRequest(ErrorMessage.REGISTER_FAILED_MESSAGE);
             }
 
-            return BadRequest("Such user already exists!");
+            return BadRequest(ErrorMessage.NON_EXISTING_USER_MESSAGE);
         }
 
         [HttpPost]
-        [Route("login")]
+        [Route(ControllerConstant.LOGIN_ROUTE)]
         public async Task<IActionResult> Login([FromForm] LoginViewModel loginModel)
         {
             var checkUser = await UserManager.FindByEmailAsync(loginModel.Email);
@@ -110,10 +102,10 @@
                         });
                 }
 
-                return BadRequest("Wrong password or token error!");
+                return BadRequest(ErrorMessage.WRONG_PASSWORD_OR_TOKEN_ERROR_MESSAGE);
             }
 
-            return BadRequest("No such user!");
+            return BadRequest(ErrorMessage.NON_EXISTING_USER_MESSAGE);
         }
 
         //[HttpPut]

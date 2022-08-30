@@ -1,12 +1,13 @@
 ﻿namespace PCDealerAPI.Controllers
 {
+    using Constants;
+
     using Data.Services.DtoModels;
     using Data.Services.EntityServices.Interfaces;
 
-    using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Mvc;
 
-    [Route("api/[controller]")]
+    [Route(ControllerConstant.CONTROLLER_BASE_ROUTE)]
     [ApiController]
     public class ModelController : ControllerBase
     {
@@ -18,8 +19,7 @@
         public IModelService ModelService { get; set; }
 
         [HttpGet]
-        [EnableCors("MyCorsPolicy")]
-        [Route("{brandId}/all")]
+        [Route($"{ControllerConstant.BRAND_ID_PARAMETER}/{ControllerConstant.ALL_ROUTE}")]
         public IActionResult GetAllBrandModels([FromRoute] string brandId)
         {
             try
@@ -36,20 +36,22 @@
         }
 
         [HttpGet]
-        [EnableCors("MyCorsPolicy")]
-        [Route("{modelId}")]
+        [Route(ControllerConstant.MODEL_ID_PARAMETER)]
         public IActionResult GetModel([FromRoute] string modelId)
         {
             ModelDto brandModel = this.ModelService.GetModel(modelId);
 
-            if (brandModel is null) return NotFound("Such model doesn't exist!");
+            if (brandModel is null) return NotFound(ErrorMessage.NON_EXISTING_MODEL_MESSAGE);
 
             return Ok(brandModel);
         }
 
         [HttpPost]
-        [EnableCors("MyCorsPolicy")]
-        [Route("{brandId}/{categoryId?}/add")]
+        [Route(
+            $"{ControllerConstant.BRAND_ID_PARAMETER}/" +
+            $"{ControllerConstant.CATEGORY_ID_OPTIONAL_PARAMETER}/" +
+            $"{ControllerConstant.ADD_ROUTE}"
+        )]
         public IActionResult AddModel([FromRoute] string brandId, [FromRoute] string? categoryId, [FromForm] ModelDto model)
         {
             try
@@ -61,7 +63,7 @@
             }
             catch (NullReferenceException)
             {
-                return NotFound("Such brand doesn't exist!");
+                return NotFound(ErrorMessage.NON_EXISTING_BRAND_MESSAGE);
             }
             catch (ArgumentException ae)
             {
@@ -70,8 +72,11 @@
         }
 
         [HttpPut]
-        [EnableCors("MyCorsPolicy")]
-        [Route("update/{modelId}/{categoryId?}")]
+        [Route(
+            $"{ControllerConstant.UPDATE_ROUTE}" +
+            $"{ControllerConstant.MODEL_ID_PARAMETER}/" +
+            $"{ControllerConstant.CATEGORY_ID_OPTIONAL_PARAMETER}"
+        )]
         public IActionResult UpdateModel([FromRoute] string modelId, [FromRoute] string? categoryId, [FromForm] ModelDto model)
         {
             try
@@ -84,20 +89,19 @@
             }
             catch (ArgumentNullException)
             {
-                return NotFound("Such brand or model doesn't exist!");
+                return NotFound(ErrorMessage.NON_EXISTING_BRAND_OR_MODEL);
             }
         }
 
         [HttpDelete]
-        [EnableCors("MyCorsPolicy")]
-        [Route("delete/{modelId}")]
+        [Route(ControllerConstant.DELETE_ROUTE + ControllerConstant.MODEL_ID_PARAMETER)]
         public IActionResult DeleteModel(string modelId)
         {
             try
             {
                 this.ModelService.DeleteModel(modelId);
 
-                return Ok("The model is successfully deleted");
+                return Ok(InfoMessage.MODEL_SUCCESSFULLY_DELETED_MESSAGE);
             }
             catch (ArgumentException ae)
             {

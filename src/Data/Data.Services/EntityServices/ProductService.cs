@@ -2,6 +2,8 @@
 {
     using AutoMapper;
 
+    using Constants;
+
     using Data.DbContext;
     using Data.Models.Entities;
     using Data.Services.DtoModels;
@@ -82,7 +84,7 @@
         public void AddProduct(ProductDto productDto, string modelId)
         {
             bool modelExists = this.DbContext.Models.Any(m => m.Id == modelId && m.IsDeleted == false);
-            if (!modelExists) throw new ArgumentException("Such model doesn't exist!");
+            if (!modelExists) throw new ArgumentException(ErrorMessage.NON_EXISTING_MODEL_MESSAGE);
 
             productDto.Model = this.ModelService.GetModel(modelId);
 
@@ -110,7 +112,7 @@
         public void UpdateProduct(ProductDto updatedProductDto, string modelId)
         {
             bool prodcutExists = this.DbContext.Products.Any(p => p.Id == updatedProductDto.Id);
-            if (!prodcutExists) throw new ArgumentException("Such product doesn't exist!");
+            if (!prodcutExists) throw new ArgumentException(ErrorMessage.NON_EXISTING_PRODUCT_MESSAGE);
 
 
             if (modelId is null)
@@ -130,7 +132,7 @@
                                                                                             .AsNoTracking()
                                                                                             .FirstOrDefault().Id);;
 
-                if (updatedProductDto.Model is null) throw new ArgumentException("Such model doesn't exist!");
+                if (updatedProductDto.Model is null) throw new ArgumentException(ErrorMessage.NON_EXISTING_MODEL_MESSAGE);
             }
 
             Product product = this.DbContext.Products.Where(p => p.Id == updatedProductDto.Id)
@@ -214,7 +216,7 @@
         public void DeleteProduct(string productId)
         {
             bool exists = this.DbContext.Products.Any(b => b.Id == productId);
-            if (!exists) throw new ArgumentException("Such product doesn't exist!");
+            if (!exists) throw new ArgumentException(ErrorMessage.NON_EXISTING_PRODUCT_MESSAGE);
 
             Product product = this.DbContext.Products.Where(r => r.Id == productId && r.IsDeleted == false)
                                                         .Include(r => r.Images.Where(i => i.IsDeleted == false))
@@ -239,11 +241,11 @@
         {
             try
             {
-                File.Delete(@$"wwwroot\{image.Path}");
+                File.Delete(@$"{ImageConstant.PUBLIC_FOLDER_NAME}\{image.Path}");
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Console.WriteLine($"Error while deleting {image.FullFileName}!");
+                Console.WriteLine(string.Format(ImageConstant.IMAGE_DELETE_ERROR_MESSAGE, image.FullFileName));
             }
         }
 

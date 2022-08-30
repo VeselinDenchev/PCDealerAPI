@@ -1,16 +1,17 @@
 ﻿namespace PCDealerAPI.Controllers
 {
+    using Constants;
+
     using Data.Services.DtoModels;
     using Data.Services.EntityServices.Interfaces;
 
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Mvc;
 
     using System.Security.Claims;
 
-    [Route("api/[controller]")]
+    [Route(ControllerConstant.CONTROLLER_BASE_ROUTE)]
     [ApiController]
     public class ReviewController : ControllerBase
     {
@@ -22,8 +23,7 @@
         public IReviewService ReviewService { get; set; }
 
         [HttpGet]
-        [EnableCors("MyCorsPolicy")]
-        [Route("product/{productId}/all")]
+        [Route(ControllerConstant.GET_ALL_REVIEWS_FOR_PRODUCT_ROUTE)]
         public IActionResult GetAllReviewsForProduct([FromRoute] string productId)
         {
             try
@@ -41,20 +41,18 @@
         }
 
         [HttpGet]
-        [EnableCors("MyCorsPolicy")]
-        [Route("{reviewId}")]
+        [Route(ControllerConstant.REVIEW_ID_PARAMETER)]
         public IActionResult GetReview([FromRoute] string reviewId)
         {
             ReviewDto review = this.ReviewService.GetReview(reviewId);
 
-            if (review is null) return NotFound("Such review doesn't exist!");
+            if (review is null) return NotFound(ErrorMessage.NON_EXISTING_REVIEW_MESSAGE);
 
             return Ok(review);
         }
 
         [HttpPost]
-        [EnableCors("MyCorsPolicy")]
-        [Route("product/{productId}/add")]
+        [Route(ControllerConstant.ADD_PRODUCT_REVIEW)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult AddReview([FromRoute] string productId, [FromForm] ReviewDto review)
         {
@@ -66,8 +64,7 @@
         }
 
         [HttpPut]
-        [EnableCors("MyCorsPolicy")]
-        [Route("update/{reviewId}")]
+        [Route(ControllerConstant.UPDATE_ROUTE + ControllerConstant.REVIEW_ID_PARAMETER)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult UpdateReview(string reviewId, [FromForm] ReviewDto review)
         {
@@ -92,8 +89,7 @@
         }
 
         [HttpDelete]
-        [EnableCors("MyCorsPolicy")]
-        [Route("delete/{reviewId}")]
+        [Route(ControllerConstant.DELETE_ROUTE + ControllerConstant.REVIEW_ID_PARAMETER)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult DeleteReview(string reviewId)
         {
@@ -101,7 +97,7 @@
             {
                 this.ReviewService.DeleteReview(reviewId);
 
-                return Ok("The review is successfully deleted");
+                return Ok(InfoMessage.REVIEW_SUCCESSFULLY_DELETED_MESSAGE);
             }
             catch (ArgumentException ae)
             {

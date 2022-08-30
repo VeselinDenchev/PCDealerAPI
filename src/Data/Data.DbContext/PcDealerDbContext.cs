@@ -2,6 +2,8 @@
 {
     using System.Reflection;
 
+    using Constants;
+
     using Data.Models.Abstractions.Interfaces.Base;
     using Data.Models.Entities;
 
@@ -34,7 +36,7 @@
         {
             configuration = new ConfigurationBuilder().AddUserSecrets(Assembly.GetExecutingAssembly()).Build();
 
-            optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+            optionsBuilder.UseSqlServer(configuration.GetConnectionString(DatabaseConstant.CONNECTION_STRING_NAME));
         }
 
         public override int SaveChanges()

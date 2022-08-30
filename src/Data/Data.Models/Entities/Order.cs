@@ -2,6 +2,8 @@
 {
     using System.Collections.Generic;
 
+    using Constants;
+
     using Data.Models.Abstractions;
     using Data.Models.Abstractions.Interfaces;
 
@@ -19,6 +21,8 @@
 
         public decimal? SubTotal { get; set; }
 
-        public string Status => DateTime.UtcNow > base.CreatedAtUtc.AddDays(3) ? "Completed" : "Pending";
+        public string Status => DateTime.UtcNow > base.CreatedAtUtc.AddMinutes(OrderConstant.DELIVERY_MINUTES) 
+                                ? OrderConstant.ORDER_STATUS_COMPLETED 
+                                : OrderConstant.ORDER_STATUS_PENDING;
     }
 }

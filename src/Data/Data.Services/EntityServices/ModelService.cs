@@ -2,6 +2,8 @@
 {
     using AutoMapper;
 
+    using Constants;
+
     using Data.DbContext;
     using Data.Models.Entities;
     using Data.Services.DtoModels;
@@ -34,7 +36,7 @@
 
             ICollection<ModelDto> brandModelDtos = new List<ModelDto>();
 
-            if (brand is null) throw new ArgumentException("Invalid brand!");
+            if (brand is null) throw new ArgumentException(ErrorMessage.NON_EXISTING_BRAND_MESSAGE);
 
             Model[] brandModels = this.DbContext.Models.Where(m => m.Brand == brand && m.IsDeleted == false).ToArray();
             brandModelDtos = this.Mapper.Map<ICollection<Model>, ICollection<ModelDto>>(brandModels);
@@ -56,12 +58,12 @@
         public void AddModel(ModelDto modelDto, string brandId, string categoryId)
         {
             bool brandExists = this.DbContext.Brands.AsNoTracking().Any(b => b.Id == brandId && b.IsDeleted == false);
-            if (!brandExists) throw new ArgumentException("Such brand doesn't exist!");
+            if (!brandExists) throw new ArgumentException(ErrorMessage.NON_EXISTING_BRAND_MESSAGE);
 
             bool categoryExists = this.DbContext.Categories.AsNoTracking().Any(c => c.Id == categoryId && c.IsDeleted == false);
             if (categoryId is not null)
             {
-                if (!categoryExists) throw new ArgumentException("Such category doesn't exist!");
+                if (!categoryExists) throw new ArgumentException(ErrorMessage.NON_EXISTING_CATEGORY_MESSAGE);
 
                 modelDto.Brand = this.BrandService.GetBrandByBrandId(brandId);
                 modelDto.Category = this.CategoryService.GetCategory(categoryId);
@@ -81,7 +83,7 @@
         public void UpdateModel(ModelDto modelDto, string categoryId)
         {
             bool modelExists = this.DbContext.Models.Any(m => m.Id == modelDto.Id && m.IsDeleted == false);
-            if (!modelExists) throw new ArgumentException("Such model doesn't exist!");
+            if (!modelExists) throw new ArgumentException(ErrorMessage.NON_EXISTING_MODEL_MESSAGE);
 
             bool categoryExists = this.DbContext.Categories.Any(c => c.Id == categoryId && c.IsDeleted == false);
 
@@ -95,7 +97,7 @@
             }
 
             CategoryDto categoryDto = this.CategoryService.GetCategory(categoryId);
-            if (categoryDto is null) throw new ArgumentException("Such category doesn't exist!");
+            if (categoryDto is null) throw new ArgumentException(ErrorMessage.NON_EXISTING_CATEGORY_MESSAGE);
 
             modelDto.Category = categoryDto;
             modelDto.Brand = this.BrandService.GetBrandByModelId(modelDto.Id);
@@ -112,7 +114,7 @@
         public void DeleteModel(string modelId)
         {
             bool exists = this.DbContext.Models.Any(st => st.Id == modelId);
-            if (!exists) throw new ArgumentException("Such model doesn't exist!");
+            if (!exists) throw new ArgumentException(ErrorMessage.NON_EXISTING_MODEL_MESSAGE);
 
             Model modelToBeDeleted = this.DbContext.Models.Where(m => m.Id == modelId).FirstOrDefault();
             modelToBeDeleted.IsDeleted = true;

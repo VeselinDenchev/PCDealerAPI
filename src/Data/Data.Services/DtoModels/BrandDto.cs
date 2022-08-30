@@ -1,15 +1,17 @@
 ﻿namespace Data.Services.DtoModels
 {
+    using Constants;
+
     using Data.Services.EntityServices.Interfaces;
 
     using Newtonsoft.Json;
 
     public class BrandDto : BaseDto
     {
-        [JsonProperty(PropertyName = "name")]
+        [JsonProperty(JsonConstant.NAME_PROPERTY)]
         public string Name { get; set; }
 
-        [JsonProperty(PropertyName = "productsCount")]
+        [JsonProperty(JsonConstant.PRODUCTS_COUNT_PROPERTY)]
         public int? ProductsCount { get; set; }
     }
 }

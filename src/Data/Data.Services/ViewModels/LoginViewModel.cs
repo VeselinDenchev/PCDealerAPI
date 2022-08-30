@@ -1,13 +1,15 @@
 ﻿namespace Data.Services.ViewModels
 {
+    using Constants;
+
     using Newtonsoft.Json;
 
     public class LoginViewModel
     {
-        [JsonProperty(PropertyName = "email")]
+        [JsonProperty(PropertyName = JsonConstant.EMAIL_PROPERTY)]
         public string Email { get; set; }
 
-        [JsonProperty(PropertyName = "password")]
+        [JsonProperty(PropertyName = JsonConstant.PASSWORD_PROPERTY)]
         public string Password { get; set; }
     }
 }

@@ -8,6 +8,8 @@
 
         public ProductDto GetProduct(string productId);
 
+        public ProductDto[] GetProductsByCategory(string categoryId);
+
         public void AddProduct(ProductDto productDto, string modelId);
 
         public void UpdateProduct(ProductDto updatedProductDto, string modelId);

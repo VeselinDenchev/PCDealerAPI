@@ -2,15 +2,16 @@
 {
     using System.Security.Claims;
 
+    using Constants;
+
     using Data.Services.DtoModels;
     using Data.Services.EntityServices.Interfaces;
 
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Mvc;
 
-    [Route("api/[controller]")]
+    [Route(ControllerConstant.CONTROLLER_BASE_ROUTE)]
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class OrderController : ControllerBase
@@ -23,8 +24,7 @@
         public IOrderService OrderService { get; set; }
 
         [HttpGet]
-        [EnableCors("MyCorsPolicy")]
-        [Route("all")]
+        [Route(ControllerConstant.ALL_ROUTE)]
         public IActionResult GetUserOrders()
         {
             string userName = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -35,20 +35,18 @@
         }
 
         [HttpGet]
-        [EnableCors("MyCorsPolicy")]
-        [Route("{orderId}")]
+        [Route(ControllerConstant.ORDER_ID_PARAMETER)]
         public IActionResult GetOrder([FromRoute] string orderId)
         {
             OrderDto order = this.OrderService.GetOrder(orderId);
 
-            if (order is null) return NotFound("Such order doesn't exist!");
+            if (order is null) return NotFound(ErrorMessage.NON_EXISTING_ORDER_MESSAGE);
 
             return Ok(order);
         }
 
         [HttpPost]
-        [EnableCors("MyCorsPolicy")]
-        [Route("add")]
+        [Route(ControllerConstant.ADD_ROUTE)]
         public IActionResult AddOrder([FromForm] OrderDto order)
         {
             string userName = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -69,15 +67,14 @@
         }
 
         [HttpDelete]
-        [EnableCors("MyCorsPolicy")]
-        [Route("delete/{orderId}")]
+        [Route(ControllerConstant.DELETE_ROUTE + ControllerConstant.ORDER_ID_PARAMETER)]
         public IActionResult DeleteOrder(string orderId)
         {
             try
             {
                 this.OrderService.DeleteOrder(orderId);
 
-                return Ok("The order is successfully deleted");
+                return Ok(InfoMessage.ORDER_SUCCESSFULLY_DELETED_MESSAGE);
             }
             catch (ArgumentException ae)
             {

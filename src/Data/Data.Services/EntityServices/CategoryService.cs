@@ -2,6 +2,8 @@
 {
     using AutoMapper;
 
+    using Constants;
+
     using Data.DbContext;
     using Data.Models.Entities;
     using Data.Services.DtoModels;
@@ -46,7 +48,7 @@
         public void UpdateCategory(CategoryDto categoryDto)
         {
             bool exists = this.DbContext.Categories.Any(c => c.Id == categoryDto.Id);
-            if (!exists) throw new ArgumentException("Such category doesn't exist!");
+            if (!exists) throw new ArgumentException(ErrorMessage.NON_EXISTING_CATEGORY_MESSAGE);
 
             Category category = this.Mapper.Map<CategoryDto, Category>(categoryDto);
             this.DbContext.Categories.Update(category);
@@ -60,7 +62,7 @@
         public void DeleteCategory(string categoryId)
         {
             bool exists = this.DbContext.Categories.Any(c => c.Id == categoryId);
-            if (!exists) throw new ArgumentException("Such category doesn't exist!");
+            if (!exists) throw new ArgumentException(ErrorMessage.NON_EXISTING_CATEGORY_MESSAGE);
 
             Category categoryToBeDeleted = this.DbContext.Categories.Where(m => m.Id == categoryId).First();
             categoryToBeDeleted.IsDeleted = true;

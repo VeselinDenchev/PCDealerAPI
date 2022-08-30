@@ -18,5 +18,7 @@
         public byte[]? GetImageFileBytesArray(string imageId, out string imageFileName);
 
         public ImageDto GetImageByFullFilleName(string fullFileName);
+
+        public string GetMimeType(string fileName);
     }
 }

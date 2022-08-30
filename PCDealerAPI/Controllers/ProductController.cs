@@ -1,13 +1,14 @@
 ﻿namespace PCDealerAPI.Controllers
 {
+    using Constants;
+
     using Data.Services.DtoModels;
     using Data.Services.EntityServices.Interfaces;
 
-    using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
-    [Route("api/[controller]")]
+    [Route(ControllerConstant.CONTROLLER_BASE_ROUTE)]
     [ApiController]
     public class ProductController : ControllerBase
     {
@@ -25,7 +26,7 @@
         public IImageService ImagesService { get; init; }
 
         [HttpGet]
-        [Route("all")]
+        [Route(ControllerConstant.ALL_ROUTE)]
         public IActionResult GetAllProducts()
         {
             ProductDto[] products = this.ProductsService.GetAllProducts();
@@ -34,18 +35,16 @@
         }
 
         [HttpGet]
-        [Route("category/{categoryId}/all")]
-        public IActionResult GetProductsByCategory(string categoryId)
+        [Route(ControllerConstant.GET_PRODUCTS_BY_CATEGORY_ROUTE)]
+        public IActionResult GetProductsByCategory([FromRoute] string categoryId)
         {
-            ProductDto[] products = this.ProductsService.GetAllProducts();
+            ProductDto[] products = this.ProductsService.GetProductsByCategory(categoryId);
 
             return Ok(products);
         }
 
-
         [HttpGet]
-        [EnableCors("MyCorsPolicy")]
-        [Route("{productId}")]
+        [Route(ControllerConstant.PRODUCT_ID_PARAMETER)]
         public IActionResult GetProduct([FromRoute] string productId)
         {
             ProductDto product = this.ProductsService.GetProduct(productId);
@@ -54,8 +53,8 @@
         }
 
         [HttpPost]
-        [Consumes("multipart/form-data")]
-        [Route("model/{modelId}/add")]
+        [Consumes(ControllerConstant.MULTIPART_FORM_DATA_REQUEST_TYPE)]
+        [Route(ControllerConstant.ADD_PRODUCT_ROUTE)]
         public IActionResult AddProduct([FromRoute] string modelId, [FromForm] ProductDto product, 
                                         [FromForm] IFormFileCollection files)
         {
@@ -77,9 +76,12 @@
         }
 
         [HttpPut]
-        [Consumes("multipart/form-data")]
-        [EnableCors("MyCorsPolicy")]
-        [Route("update/{productId}/{modelId?}")]
+        [Consumes(ControllerConstant.MULTIPART_FORM_DATA_REQUEST_TYPE)]
+        [Route(
+            $"{ControllerConstant.UPDATE_ROUTE}" +
+            $"{ControllerConstant.PRODUCT_ID_PARAMETER}/" +
+            $"{ControllerConstant.MODEL_ID_OPTIONAL_PARAMETER}"
+        )]
         public IActionResult UpdateProduct([FromRoute] string productId, [FromRoute] string? modelId, [FromForm] ProductDto product, 
                                             [FromForm] IFormFileCollection files)
         {
@@ -96,12 +98,12 @@
         }
 
         [HttpDelete]
-        [Route("delete/{productId}")]
+        [Route(ControllerConstant.DELETE_ROUTE + ControllerConstant.PRODUCT_ID_PARAMETER)]
         public IActionResult DeleteProduct([FromRoute] string productId)
         {
             if (productId is null)
             {
-                return BadRequest("Invalid product id!");
+                return BadRequest(ErrorMessage.NON_EXISTING_PRODUCT_MESSAGE);
             }
 
             try
@@ -113,7 +115,7 @@
                 return NotFound(ae.Message);
             }
 
-            return Ok("Product deleted sucessfully!");
+            return Ok(InfoMessage.PRODUCT_SUCCESSFULLY_DELETED_MESSAGE);
         }
 
         [NonAction]
@@ -139,7 +141,7 @@
                     imagesDtos[i] = image;
                 }
             }
-            else throw new FileNotFoundException("You must upload images!");
+            else throw new FileNotFoundException(ErrorMessage.IMAGE_REQUIRED_MESSAGE);
 
             return imagesDtos;
         }
@@ -147,7 +149,7 @@
         [NonAction]
         private ObjectResult ValidateFiles(ProductDto product, List<IFormFile> files)
         {
-            if (product is null) return BadRequest("Invalid product!");
+            if (product is null) return BadRequest(ErrorMessage.NON_EXISTING_PRODUCT_MESSAGE);
 
             List<ImageDto> imageDtos = new List<ImageDto>();
 

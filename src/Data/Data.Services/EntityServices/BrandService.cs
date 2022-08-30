@@ -5,6 +5,8 @@
 
     using AutoMapper;
 
+    using Constants;
+
     using Data.DbContext;
     using Data.Models.Entities;
     using Data.Services.DtoModels;
@@ -74,7 +76,7 @@
         public void UpdateBrand(BrandDto updatedBrandDto)
         {
             bool exists = this.DbContext.Brands.Any(b => b.Id == updatedBrandDto.Id);
-            if (!exists) throw new ArgumentException("Such brand doesn't exist!");
+            if (!exists) throw new ArgumentException(ErrorMessage.NON_EXISTING_BRAND_MESSAGE);
 
             Brand brand = this.Mapper.Map<BrandDto, Brand>(updatedBrandDto);
 
@@ -88,7 +90,7 @@
         public void DeleteBrand(string brandId)
         {
             bool exists = this.DbContext.Brands.Any(b => b.Id == brandId);
-            if (!exists) throw new ArgumentException("Such brand doesn't exist!");
+            if (!exists) throw new ArgumentException(ErrorMessage.NON_EXISTING_BRAND_MESSAGE);
 
             Brand brand = this.DbContext.Brands.Where(r => r.Id == brandId && r.IsDeleted == false)
                                                 //.Include(b => b.Models)

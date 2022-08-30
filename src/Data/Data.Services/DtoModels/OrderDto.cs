@@ -1,42 +1,44 @@
 ﻿namespace Data.Services.DtoModels
 {
+    using Constants;
+
     using Data.Models.Entities;
 
     using Newtonsoft.Json;
 
     public class OrderDto : BaseDto
     {
-        [JsonProperty(PropertyName = "cartItems")]
+        [JsonProperty(PropertyName = JsonConstant.CART_ITEMS_PROPERTY)]
         public ICollection<CartItemDto> CartItems { get; set; }
 
-        [JsonProperty(PropertyName = "user")]
+        [JsonProperty(PropertyName = JsonConstant.USER_PROPERTY)]
         public User? User { get; set; }
 
-        [JsonProperty(PropertyName = "firstName")]
+        [JsonProperty(PropertyName = JsonConstant.FIRST_NAME_PROPERTY)]
         public string FirstName { get; set; }
 
-        [JsonProperty(PropertyName = "lastName")]
+        [JsonProperty(PropertyName = JsonConstant.LAST_NAME_PROPERTY)]
         public string LastName { get; set; }
 
-        [JsonProperty(PropertyName = "phoneNumber")]
+        [JsonProperty(PropertyName = JsonConstant.PHONE_NUMBER_PROPERTY)]
         public string PhoneNumber { get; set; }
 
-        [JsonProperty(PropertyName = "address")]
+        [JsonProperty(PropertyName = JsonConstant.ADDRESS_PROPERTY)]
         public string Address { get; set; }
 
-        [JsonProperty(PropertyName = "subTotal")]
+        [JsonProperty(PropertyName = JsonConstant.SUB_TOTAL_PROPERTY)]
         public decimal SubTotal { get; set; }
 
-        [JsonProperty(PropertyName = "shippingCost")]
+        [JsonProperty(PropertyName = JsonConstant.SHIPPING_COST_PROPERTY)]
         public decimal ShippingCost => this.SubTotal < 1_000 ? 5 : 0;
 
-        [JsonProperty(PropertyName = "grandTotal")]
+        [JsonProperty(PropertyName = JsonConstant.GRAND_TOTAL_PROPERTY)]
         public decimal GrandTotal => this.SubTotal + this.ShippingCost;
 
-        [JsonProperty(PropertyName = "createdAtString")]
+        [JsonProperty(PropertyName = JsonConstant.CREATED_AT_STRING)]
         public string? CreatedAtString => 
             base.CreatedAtUtc.HasValue 
-            ? DateTime.Parse(base.CreatedAtUtc.ToString()).ToLocalTime().ToString("dd/MM/yyyy HH:mm") 
+            ? DateTime.Parse(base.CreatedAtUtc.ToString()).ToLocalTime().ToString(DateTimeFormat.CUSTOM_DATE_TIME_FORMAT) 
             : null;
 
         public string? Status
@@ -45,7 +47,9 @@
             {
                 if (base.CreatedAtUtc.HasValue)
                 {
-                    return DateTime.UtcNow > ((DateTime)base.CreatedAtUtc).AddMinutes(1) ? "Completed" : "Pending";
+                    return DateTime.UtcNow > ((DateTime)base.CreatedAtUtc).AddMinutes(OrderConstant.DELIVERY_MINUTES) 
+                                             ? OrderConstant.ORDER_STATUS_COMPLETED 
+                                             : OrderConstant.ORDER_STATUS_PENDING;
                 }
 
                 return null;

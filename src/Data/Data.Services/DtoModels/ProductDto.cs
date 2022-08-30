@@ -2,48 +2,50 @@
 {
     using System.ComponentModel.DataAnnotations;
 
+    using Constants;
+
     using Newtonsoft.Json;
 
     public class ProductDto : BaseDto
     {
-        [JsonProperty(PropertyName = "name")]
+        [JsonProperty(PropertyName = JsonConstant.NAME_PROPERTY)]
         public string Name { get; set; }
 
-        [JsonProperty(PropertyName = "processor")]
+        [JsonProperty(PropertyName = JsonConstant.PROCESSOR_PROPERTY)]
         public string Processor { get; set; }
 
-        [JsonProperty(PropertyName = "ram")]
+        [JsonProperty(PropertyName = JsonConstant.RAM_PROPERTY)]
         public string Ram { get; set; }
 
-        [JsonProperty(PropertyName = "gpu")]
+        [JsonProperty(PropertyName = JsonConstant.GPU_PROPERTY)]
         public string GPU { get; set; }
 
-        [JsonProperty(PropertyName = "storage")]
+        [JsonProperty(PropertyName = JsonConstant.STORAGE_PROPERTY)]
         public string Storage { get; set; }
 
-        [JsonProperty(PropertyName = "display")]
+        [JsonProperty(PropertyName = JsonConstant.DISPLAY_PROPERTY)]
         public string Display { get; set; }
 
-        [JsonProperty(PropertyName = "rating")]
+        [JsonProperty(PropertyName = JsonConstant.RATING_PROPERTY)]
         public float? Rating { get; set; }
 
-        [JsonProperty(PropertyName = "model")]
+        [JsonProperty(PropertyName = JsonConstant.MODEL_PROPERTY)]
         public ModelDto? Model { get; set; }
 
-        [JsonProperty(PropertyName = "price")]
+        [JsonProperty(PropertyName = JsonConstant.PRICE_PROPERTY)]
         public decimal Price { get; set; }
 
-        [JsonProperty(PropertyName = "images")]
+        [JsonProperty(PropertyName = JsonConstant.IMAGES_PROPERTY)]
         public ICollection<ImageDto>? Images { get; set; }
 
-        [JsonProperty(PropertyName = "description")]
+        [JsonProperty(PropertyName = JsonConstant.DESCRIPTION_PROPERTY)]
         public string Description { get; set; }
 
-        [JsonProperty(PropertyName = "quantity")]
-        [Range(0, short.MaxValue, ErrorMessage = "Quantity must be non negative!")]
+        [JsonProperty(PropertyName = JsonConstant.QUANTITY_PROPERTY)]
+        [Range(0, short.MaxValue, ErrorMessage = ErrorMessage.NEGATIVE_QUANTITY_MESSAGE)]
         public short Quantity { get; set; }
 
-        [JsonProperty(PropertyName = "salesCount")]
+        [JsonProperty(PropertyName = JsonConstant.SALES_COUNT_PROPERTY)]
         public int? SalesCount { get; set; }
     }
 }

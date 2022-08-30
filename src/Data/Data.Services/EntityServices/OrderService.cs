@@ -2,6 +2,8 @@
 {
     using AutoMapper;
 
+    using Constants;
+
     using Data.DbContext;
     using Data.Models.Entities;
     using Data.Services.DtoModels;
@@ -57,7 +59,7 @@
             {
                 bool productExists = this.DbContext.Products.AsNoTracking()
                                                             .Any(p => p.Id == cartItem.ProductId && p.IsDeleted == false);
-                if (!productExists) throw new ArgumentException("Such product doesn't exist!");
+                if (!productExists) throw new ArgumentException(ErrorMessage.NON_EXISTING_PRODUCT_MESSAGE);
 
                 short desiredQuantity = cartItem.Quantity;
                 short quantityInStock = this.DbContext.Products.Where(p => p.Id == cartItem.ProductId)
@@ -65,7 +67,8 @@
                                                                 .FirstOrDefault().Quantity;
 
                 bool isEnoughQuantityInStock = desiredQuantity <= quantityInStock;
-                if (!isEnoughQuantityInStock) throw new ArgumentOutOfRangeException("Not enough quantity ot this product in stock!");
+                if (!isEnoughQuantityInStock) 
+                    throw new ArgumentOutOfRangeException(ErrorMessage.NOT_ENOUGH_QUANTITY_OF_PRODUCT_MESSAGE);
 
                 Product buyedProduct = this.DbContext.Products.Where(p => p.Id == cartItem.ProductId).AsNoTracking().First();
                 buyedProduct.Quantity = (short)(quantityInStock - desiredQuantity);
@@ -106,7 +109,7 @@
         public void DeleteOrder(string orderId)
         {
             bool exists = this.DbContext.Orders.Any(b => b.Id == orderId);
-            if (!exists) throw new ArgumentException("Such order doesn't exist!");
+            if (!exists) throw new ArgumentException(ErrorMessage.NON_EXISTING_ORDER_MESSAGE);
 
             Order order = this.DbContext.Orders.Where(r => r.Id == orderId && r.IsDeleted == false)
                                                 .Include(o => o.CartItems)

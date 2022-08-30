@@ -13,6 +13,7 @@ using Microsoft.OpenApi.Models;
 using Data.Services.JWT.Interfaces;
 using Data.Services.EntityServices.Interfaces;
 using Data.Services.EntityServices;
+using Constants;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,8 +44,8 @@ builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddScoped<IJwtService, JwtService>();
-builder.Services.Configure<TokenModel>(builder.Configuration.GetSection("JWT"));
-var token = builder.Configuration.GetSection("JWT").Get<TokenModel>();
+builder.Services.Configure<TokenModel>(builder.Configuration.GetSection(JsonConstant.JWT_OBJECT));
+var token = builder.Configuration.GetSection(JsonConstant.JWT_OBJECT).Get<TokenModel>();
 var secret = Encoding.ASCII.GetBytes(token.TokenSecret);
 
 builder.Services.AddIdentity<User, UserRole>().AddEntityFrameworkStores<PcDealerDbContext>().AddDefaultTokenProviders();
@@ -71,17 +72,17 @@ builder.Services.AddAuthentication(a =>
     {
         ValidateIssuer = true,
         ValidateAudience = true,
-        ValidAudience = builder.Configuration["JWT:" + "ValidateAudience"],
-        ValidIssuer = builder.Configuration["JWT:" + "ValidateIssuer"],
+        ValidAudience = builder.Configuration[$"{JsonConstant.JWT_OBJECT}:{JsonConstant.VALIDATE_AUDIENCE_PROPERTY}"],
+        ValidIssuer = builder.Configuration[$"{JsonConstant.JWT_OBJECT}:{JsonConstant.VALIDATE_ISSUER_PROPERTY}"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
-                                .GetBytes(builder.Configuration["JWT:" + "TokenSecret"]))
+                                .GetBytes(builder.Configuration[$"{JsonConstant.JWT_OBJECT}:{JsonConstant.TOKEN_SECRET_PROPERTY}"]))
     };
 });
 
 // CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("MyCorsPolicy", builder => builder
+    options.AddPolicy(ControllerConstant.CORS_POLICY, builder => builder
         //.WithOrigins("http://localhost:3000/")
         .AllowAnyOrigin()
         .AllowAnyMethod()
@@ -101,7 +102,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("MyCorsPolicy");
+app.UseCors(ControllerConstant.CORS_POLICY);
 
 app.UseHttpsRedirection();
 

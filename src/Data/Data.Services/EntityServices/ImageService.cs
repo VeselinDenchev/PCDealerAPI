@@ -4,6 +4,8 @@
 
     using AutoMapper;
 
+    using Constants;
+
     using Data.DbContext;
     using Data.Models.Entities;
     using Data.Services.DtoModels;
@@ -40,11 +42,13 @@
         }
 
         public string GenerateUniqueFileName() => Guid.NewGuid().ToString().Substring(0, 10);
+
         public string[] GetAllImagesFullNamesForProduct(ProductDto product)
         {
             ImageDto[] images = this.GetAllImagesForProduct(product);
 
             if (images is null) return null;
+
             return images.Select(r => r.FullFileName).ToArray();
         }
 
@@ -77,11 +81,26 @@
 
             if (imagePath is not null)
             {
-                byte[] imageBytesArray = File.ReadAllBytes(@$"wwwroot/{imagePath}");
+                byte[] imageBytesArray = File.ReadAllBytes($@"{ImageConstant.PUBLIC_FOLDER_NAME}/{imagePath}");
                 return imageBytesArray;
             }
 
             return null;
+        }
+
+        // https://stackoverflow.com/questions/1029740/get-mime-type-from-filename-extension
+        // Works only on Windows
+        public string GetMimeType(string fileName)
+        {
+            string mimeType = ImageConstant.MIME_TYPE_APPLICATION_UNKNOWN;
+            string ext = Path.GetExtension(fileName).ToLower();
+            Microsoft.Win32.RegistryKey regKey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(ext);
+            if (regKey != null && regKey.GetValue(ImageConstant.REG_KEY_CONTENT_TYPE) != null)
+            {
+                mimeType = regKey.GetValue(ImageConstant.REG_KEY_CONTENT_TYPE).ToString();
+            }
+
+            return mimeType;
         }
 
         private ImageDto[] GetAllImagesForProduct(ProductDto productDto)
