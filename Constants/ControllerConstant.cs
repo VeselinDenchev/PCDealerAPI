@@ -44,7 +44,7 @@
 
         public const string ADD_PRODUCT_ROUTE = $"model/{MODEL_ID_PARAMETER}/{ADD_ROUTE}";
 
-        public const string GET_ALL_REVIEWS_FOR_PRODUCT_ROUTE = $"product/{PRODUCT_ID_PARAMETER}/{ALL_ROUTE}";
+        public const string GET_ALL_PRODUCT_REVIEWS_ROUTE = $"product/{PRODUCT_ID_PARAMETER}/{ALL_ROUTE}";
 
         public const string ADD_PRODUCT_REVIEW = $"product/{PRODUCT_ID_PARAMETER}/{ADD_ROUTE}";
     }

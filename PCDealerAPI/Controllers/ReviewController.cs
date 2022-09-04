@@ -23,8 +23,8 @@
         public IReviewService ReviewService { get; set; }
 
         [HttpGet]
-        [Route(ControllerConstant.GET_ALL_REVIEWS_FOR_PRODUCT_ROUTE)]
-        public IActionResult GetAllReviewsForProduct([FromRoute] string productId)
+        [Route(ControllerConstant.GET_ALL_PRODUCT_REVIEWS_ROUTE)]
+        public IActionResult GetAllProductReviews([FromRoute] string productId)
         {
             try
             {
