@@ -68,7 +68,7 @@ Each entity has a controller with the following actions:
             <li>GetUserOrders - <i>/api/order/all</i></li>
             <li>GetOrder - <i>/api/order/{orderId}</i></li>
             <li>AddOrder - <i>/api/order/add</i></li>
-            <li>Deleteorder - <i>/api/order/delete/{orderId}</i></li>
+            <li>DeleteОrder - <i>/api/order/delete/{orderId}</i></li>
         </ul>
     </li>
     <li>
